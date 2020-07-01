@@ -9,6 +9,8 @@ const Stack = createMaterialTopTabNavigator();
 export default function Navigation() {
   return (
     <Stack.Navigator
+    swipeEnabled={false}
+    backBehavior="none"
       initialRouteName="welcome"
       tabBarOptions={{ style: { height: 0 } }}
     >
