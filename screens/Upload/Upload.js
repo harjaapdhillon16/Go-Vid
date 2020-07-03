@@ -1,6 +1,7 @@
 import React from "react";
 import styled from "styled-components/native";
 import { Title } from "react-native-paper";
+import {setStatusBarHidden} from 'expo-status-bar';
 
 import theme from "../../utils/theme";
 
@@ -13,7 +14,10 @@ const Heading = styled(Title)`
   color: ${theme.white};
 `;
 
-const Upload = () => {
+const Upload = ({navigation}) => {
+  React.useState(()=>{
+    navigation.addListener('focus',()=>setStatusBarHidden(true,'slide'))
+  })
   return (
     <Container>
       <Heading>Hello Upload</Heading>

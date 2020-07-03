@@ -1,6 +1,7 @@
 import React from "react";
 import styled from "styled-components/native";
 import { Title } from "react-native-paper";
+import { setStatusBarHidden } from "expo-status-bar";
 
 import theme from "../../utils/theme";
 import BottomNavigationBar from "../../components/BottomNavigationBar";
@@ -14,11 +15,15 @@ const Heading = styled(Title)`
   color: ${theme.white};
 `;
 
-const Home = () => {
+const Home = ({navigation}) => {
+    React.useEffect(() => {
+      navigation.addListener('focus',()=>setStatusBarHidden(true, "fade"))
+      
+    });
   return (
     <Container>
       <Heading>Hello Home</Heading>
-      <BottomNavigationBar/>
+      <BottomNavigationBar homeScreen />
     </Container>
   );
 };
