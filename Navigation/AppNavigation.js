@@ -9,6 +9,7 @@ import Notifications from "../screens/Notifications/Notifications";
 import Profile from "../screens/Profile/Profile";
 
 import EditProfile from "../screens/Profile/EditProfile";
+import Settings from "../screens/Profile/Settings";
 
 const Stack = createBottomTabNavigator();
 const Stack2 = createStackNavigator();
@@ -36,6 +37,7 @@ const AppNavigation2 = () => {
       <Stack2.Screen name="homeApp" component={AppNavigation} />
       <Stack2.Screen name="editProfile" component={EditProfile} />
       <Stack2.Screen name="upload" component={Upload} />
+      <Stack2.Screen name="settings" component={Settings} />
     </Stack2.Navigator>
   );
 };

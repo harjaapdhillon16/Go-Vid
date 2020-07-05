@@ -36,7 +36,7 @@ const ProfileActions = () => {
       <Settings
         labelStyle={{ fontWeight: "bold" }}
         mode="contained"
-        onPress={() => console.log("Pressed")}
+        onPress={() => Navigation.navigate('settings')}
       >
         Settings
       </Settings>

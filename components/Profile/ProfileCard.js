@@ -9,7 +9,7 @@ const { width } = Dimensions.get("screen");
 
 const Container = styled.View`
   width: 95%;
-  background-color: ${theme.primaryColor};
+  background-color: ${theme.lightWhite};
   min-height: 50px;
   margin-top: 10px;
   align-self: center;

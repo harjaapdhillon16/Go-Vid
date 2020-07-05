@@ -2,6 +2,8 @@ import React from "react";
 import styled from "styled-components/native";
 import { Text } from "react-native-paper";
 import { Dimensions } from "react-native";
+import MaterialIcons from "react-native-vector-icons/MaterialIcons";
+import {useNavigation} from "@react-navigation/native";
 
 import theme from "../../utils/theme";
 import EditImage from "../../components/EditProfile/EditImage";
@@ -19,18 +21,34 @@ const Heading = styled(Text)`
   padding: 5px;
   font-weight: 600;
   font-size: 25px;
+  margin-left: 10px;
+  align-self: center;
 `;
-const ScrollView = styled.ScrollView``
 
+const Row = styled.View`
+  width: 100%;
+  flex-direction: row;
+  align-items: center;
+`;
+const Icon = styled(MaterialIcons)`
+  font-weight: bold;
+  padding: 5px;
+`;
+
+const ScrollView = styled.ScrollView``;
 
 const EditProfile = () => {
+  const navigation = useNavigation()
   return (
     <Container>
-    <ScrollView>
-      <Heading>Edit Profile</Heading>
-      <EditImage />
-      <EditDetails/>
-    </ScrollView>
+      <ScrollView>
+        <Row>
+          <Icon onPress={()=>navigation.goBack()} name="arrow-back" size={30} color={theme.white} />
+          <Heading>Edit Profile</Heading>
+        </Row>
+        <EditImage />
+        <EditDetails />
+      </ScrollView>
     </Container>
   );
 };
