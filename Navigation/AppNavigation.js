@@ -33,10 +33,10 @@ const AppNavigation = () => {
 
 const AppNavigation2 = () => {
   return (
-    <Stack2.Navigator initialRouteName="homeApp" headerMode="none">
+    <Stack2.Navigator  initialRouteName="homeApp" headerMode="none">
       <Stack2.Screen name="homeApp" component={AppNavigation} />
       <Stack2.Screen name="editProfile" component={EditProfile} />
-      <Stack2.Screen name="upload" component={Upload} />
+      <Stack2.Screen options={{gestureEnabled:false}} name="upload" component={Upload} />
       <Stack2.Screen name="settings" component={Settings} />
     </Stack2.Navigator>
   );

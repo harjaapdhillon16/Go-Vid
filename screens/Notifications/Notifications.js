@@ -1,6 +1,7 @@
 import React from "react";
 import styled from "styled-components/native";
 import { Title } from "react-native-paper";
+import { StatusBar, setStatusBarHidden } from "expo-status-bar";
 
 import theme from "../../utils/theme";
 import BottomNavigationBar from "../../components/BottomNavigationBar";
@@ -8,18 +9,22 @@ import BottomNavigationBar from "../../components/BottomNavigationBar";
 const Container = styled.View`
   background-color: ${theme.black};
   flex: 1;
-  padding-top:20px;
+  padding-top: 20px;
 `;
 
 const Heading = styled(Title)`
   color: ${theme.white};
-  padding:5px;
-  font-weight:bold;
+  padding: 10px;
+  font-weight: bold;
 `;
 
-const Notifications = () => {
+const Notifications = ({ navigation }) => {
+  React.useEffect(() => {
+    navigation.addListener("focus", () => setStatusBarHidden(false, "none"));
+  });
   return (
     <Container>
+      <StatusBar style="light-content" />
       <Heading>Notifications</Heading>
       <BottomNavigationBar />
     </Container>

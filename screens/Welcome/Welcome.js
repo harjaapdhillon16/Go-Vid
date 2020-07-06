@@ -1,5 +1,5 @@
 import React from "react";
-import { Text, View } from "react-native";
+import { Text, View ,Platform} from "react-native";
 import styled from "styled-components/native";
 import { setStatusBarHidden } from "expo-status-bar";
 import { Button } from "react-native-paper";
@@ -41,7 +41,9 @@ const GetStarted = styled(Button)`
 
 export default function Welcome({ navigation }) {
   React.useEffect(() => {
-    setStatusBarHidden(true, "fade");
+    if (Platform.OS === "ios") {
+      navigation.addListener("focus", () => setStatusBarHidden(true, "fade"));
+    }
   });
   return (
     <Container source={WelcomeImage}>

@@ -18,6 +18,7 @@ export default function App() {
     <>
       <NavigationContainer>
         <PaperProvider theme={theme}>
+          <StatusBar style="dark-content" />
           <Navigation />
         </PaperProvider>
       </NavigationContainer>
