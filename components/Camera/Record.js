@@ -39,11 +39,19 @@ const StyleCircle = {
   height: 80,
 };
 
-const { height } = Dimensions.get("screen");
+const { height, width } = Dimensions.get("screen");
 
 const FlipIcon = styled(IonicIcons)`
   margin-bottom: 10px;
 `;
+
+const AnimatedStyle = {
+  height: 10,
+  position: "absolute",
+  top: 0,
+  left: 0,
+  backgroundColor: theme.red,
+};
 
 export default class Circle extends Component {
   constructor(props) {
@@ -55,6 +63,9 @@ export default class Circle extends Component {
       recordingStarted: false,
       iconsShow: true,
       opacity: 1,
+      recordingCompleted: false,
+      width: new Animated.Value(0),
+      flashMode: Camera.Constants.FlashMode.on,
     };
     this.changeView = this.changeView.bind(this);
     this.handlePressIn = this.handlePressIn.bind(this);
@@ -77,6 +88,7 @@ export default class Circle extends Component {
 
   async handlePressIn() {
     const { camera } = this.state;
+    this.setState({ recordingCompleted: false });
     if (Platform.OS === "ios") {
       this.setState({ recordingStarted: true });
       this.setState({ iconsShow: false });
@@ -87,9 +99,15 @@ export default class Circle extends Component {
       toValue: 1.5,
       useNativeDriver: false,
     }).start();
-
+    Animated.timing(this.state.width, {
+      toValue: width,
+      duration: 60000,
+      useNativeDriver: false,
+    }).start();
     const video = await camera.recordAsync();
-    this.props.VideoPathSet(video.uri);
+    this.state.type === Camera.Constants.Type.back
+      ? this.props.VideoPathSet(video.uri,true)
+      : this.props.VideoPathSet(video.uri, false);
   }
   handlePressOut() {
     const { camera } = this.state;
@@ -97,15 +115,22 @@ export default class Circle extends Component {
       toValue: 1,
       useNativeDriver: false,
     }).start();
+    Animated.timing(this.state.width).stop();
+    if (this.state.recordingStarted) {
+      this.setState({ recordingCompleted: true });
+    }
     this.setState({ iconsShow: true });
     this.setState({ recordingStarted: false });
-    this.setState({opacity:1})
+    this.setState({ opacity: 1 });
     camera.stopRecording();
   }
   ApplyRef(ref) {
     if (this.state.camera === null) {
       this.setState({ camera: ref });
     }
+  }
+  FlashToggle() {
+    // if(Camera.)
   }
   panResponder = PanResponder.create({
     // Ask to be the responder:
@@ -163,6 +188,7 @@ export default class Circle extends Component {
               height: "100%",
               backgroundColor: "rgba(255, 255, 255, 0.01)",
             }}
+            flash={Camera.Constants.FlashMode.torch}
             type={this.state.type}
             ref={(ref) => this.ApplyRef(ref)}
             zoom={this.state.zoom}
@@ -201,14 +227,28 @@ export default class Circle extends Component {
                     />
                   )}
 
-                  <FlipIcon name="flash" size={40} color={theme.white} />
+                  {/* <FlipIcon name="flash" size={40} color={theme.white} /> */}
                 </View>
-                <Icon2 name="check-box" color={theme.red} size={40} />
               </>
             ) : (
               <View />
             )}
-
+            {this.state.recordingCompleted ? (
+              <Icon2
+                name="check-box"
+                onPress={() => this.props.navigateUpload()}
+                color={theme.red}
+                size={40}
+              />
+            ) : (
+              <View />
+            )}
+            <Animated.View
+              style={{
+                width: this.state.width,
+                ...AnimatedStyle,
+              }}
+            />
             <TouchableWithoutFeedback onPressIn={this.handlePressIn}>
               <Animated.View
                 style={[StyleCircle, animatedStyle]}
@@ -217,8 +257,7 @@ export default class Circle extends Component {
           </Camera>
         </View>
       );
-    }
-    else{
+    } else {
       return (
         <View
           style={{ backgroundColor: "rgba(255, 255, 255, 0.01)", flex: 1 }}
@@ -229,6 +268,7 @@ export default class Circle extends Component {
               height: "100%",
               backgroundColor: "rgba(255, 255, 255, 0.01)",
             }}
+            flash={this.state.flashMode}
             type={this.state.type}
             ref={(ref) => this.ApplyRef(ref)}
             zoom={this.state.zoom}
@@ -267,13 +307,20 @@ export default class Circle extends Component {
                     />
                   )}
 
-                  <FlipIcon name="flash" size={40} color={theme.white} />
+                  {/* <FlipIcon name="flash" size={40} color={theme.white} /> */}
                 </View>
-                <Icon2 name="check-box" color={theme.red} size={40} />
               </>
             ) : (
               <View />
             )}
+
+            <Icon2
+              name="check-box"
+              style={{ opacity: this.state.opacity }}
+              color={theme.red}
+              size={40}
+              onPress={() => this.props.navigateUpload()}
+            />
 
             <TouchableWithoutFeedback onPressIn={this.handlePressIn}>
               <Animated.View

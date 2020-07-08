@@ -4,7 +4,7 @@ import { createStackNavigator } from "@react-navigation/stack";
 
 import Home from "../screens/Home/home";
 import Search from "../screens/Search/Search";
-import Upload from "../screens/Upload/Upload";
+import UploadCombine from "../screens/Upload/UploadCombineScreens";
 import Notifications from "../screens/Notifications/Notifications";
 import Profile from "../screens/Profile/Profile";
 
@@ -33,10 +33,14 @@ const AppNavigation = () => {
 
 const AppNavigation2 = () => {
   return (
-    <Stack2.Navigator  initialRouteName="homeApp" headerMode="none">
+    <Stack2.Navigator initialRouteName="homeApp" headerMode="none">
       <Stack2.Screen name="homeApp" component={AppNavigation} />
       <Stack2.Screen name="editProfile" component={EditProfile} />
-      <Stack2.Screen options={{gestureEnabled:false}} name="upload" component={Upload} />
+      <Stack2.Screen
+        options={{ gestureEnabled: false }}
+        name="UploadCombine"
+        component={UploadCombine}
+      />
       <Stack2.Screen name="settings" component={Settings} />
     </Stack2.Navigator>
   );

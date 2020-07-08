@@ -18,9 +18,8 @@ const Container = styled.View``;
 
 export default function CameraComponent() {
   const [hasPermission, setHasPermission] = useState(null);
-  const [type, setType] = useState(Camera.Constants.Type.back);
   const [VideoLocation, _setVideoLocation] = React.useState([]);
-  const [Recorded, _setRecorded] = React.useState(false);
+  const [cameraTypeState, _setCameraTypeState] = React.useState([]);
   const navigation = useNavigation();
   useEffect(() => {
     (async () => {
@@ -38,19 +37,20 @@ export default function CameraComponent() {
   }
   return (
     <Container style={{ flex: 1 }}>
-      {Recorded ? (
-        <View />
-      ) : (
-        <Record
-          VideoPathSet={(path) => {
-            const paths = VideoLocation;
-            paths.push(path);
-            _setVideoLocation([...paths]);
-            console.log(paths);
-          }}
-          goBack={() => navigation.goBack()}
-        />
-      )}
+      <Record
+        VideoPathSet={(path, cameraType) => {
+          const paths = VideoLocation;
+          const TypeCamera = cameraTypeState;
+          TypeCamera.push(cameraType);
+          paths.push(path);
+          _setCameraTypeState([...TypeCamera]);
+          _setVideoLocation([...paths]);
+        }}
+        navigateUpload={() =>
+          navigation.navigate("upload", { videoFiles: VideoLocation,cameraType:cameraTypeState })
+        }
+        goBack={() => navigation.goBack()}
+      />
     </Container>
   );
 }

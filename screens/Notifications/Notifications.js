@@ -24,7 +24,7 @@ const Notifications = ({ navigation }) => {
   });
   return (
     <Container>
-      <StatusBar style="light-content" />
+      <StatusBar style="light" />
       <Heading>Notifications</Heading>
       <BottomNavigationBar />
     </Container>

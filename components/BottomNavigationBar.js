@@ -5,7 +5,6 @@ import MaterialDesign from "react-native-vector-icons/MaterialIcons";
 import theme from "../utils/theme";
 import { TouchableWithoutFeedback } from "react-native";
 
-import { useNavigationState } from "@react-navigation/native";
 
 const Container = styled.View`
   width: 100%;
@@ -47,7 +46,7 @@ const BottomNavigationBar = ({ homeScreen }) => {
           />
         </IconView>
       </TouchableWithoutFeedback>
-      <TouchableWithoutFeedback onPress={() => navigation.navigate("upload")}>
+      <TouchableWithoutFeedback onPress={() => navigation.navigate("UploadCombine")}>
         <IconView>
           <MaterialDesign name="backup" color={theme.primaryColor} size={30} />
         </IconView>

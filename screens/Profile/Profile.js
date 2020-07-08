@@ -28,7 +28,7 @@ const Profile = ({navigation}) => {
   });
   return (
     <Container>
-    <StatusBar style="light"/>
+    <StatusBar style="light-content"/>
       <ScrollView>
         <ProfileCard />
         <ProfileActions />

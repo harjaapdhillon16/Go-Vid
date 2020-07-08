@@ -6,5 +6,6 @@ const theme = {
   lightBlack: "#262626",
   red: "#EE1D52",
   lightWhite: "#cccccc",
+  purpleColor: "#6200EE",
 };
 export default theme;
