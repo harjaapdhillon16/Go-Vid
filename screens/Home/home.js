@@ -1,16 +1,18 @@
 import React from "react";
 import styled from "styled-components/native";
 import { Title } from "react-native-paper";
-import { setStatusBarHidden ,StatusBar} from "expo-status-bar";
+import { setStatusBarHidden, StatusBar } from "expo-status-bar";
 import { Platform } from "react-native";
 
+import Post from "../../components/Home/Post";
+import VideoPost from "../../components/Home/VideoWithLikes";
 import theme from "../../utils/theme";
 import BottomNavigationBar from "../../components/BottomNavigationBar";
 
 const Container = styled.View`
   background-color: ${theme.black};
   flex: 1;
-  padding-top:${Platform.OS==='android'?"20px":"0px"}
+  padding-top: ${Platform.OS === "android" ? "20px" : "0px"};
 `;
 
 const Heading = styled(Title)`
@@ -25,8 +27,8 @@ const Home = ({ navigation }) => {
   });
   return (
     <Container>
-    <StatusBar style="light"/>
-      <Heading>Hello Home</Heading>
+      <StatusBar style="light" />
+      <Post />
       <BottomNavigationBar homeScreen />
     </Container>
   );

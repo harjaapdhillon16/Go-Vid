@@ -27,6 +27,7 @@ const Search = ({ navigation }) => {
   React.useEffect(() => {
     navigation.addListener("focus", () => setStatusBarHidden(false, "none"));
   });
+  let reference;
   return (
     <Container>
       <StatusBar style="light" />
@@ -34,11 +35,13 @@ const Search = ({ navigation }) => {
         placeholder="Search"
         placeholderTextColor={theme.grey}
         iconColor={theme.grey}
+        ref={ref=>reference=ref}
         theme={{
           colors: {
             text: theme.white,
           },
         }}
+        onIconPress={()=>reference.focus()}
       />
       <BottomNavigationBar />
     </Container>
