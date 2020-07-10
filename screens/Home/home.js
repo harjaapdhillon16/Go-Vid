@@ -4,8 +4,8 @@ import { Title } from "react-native-paper";
 import { setStatusBarHidden, StatusBar } from "expo-status-bar";
 import { Platform } from "react-native";
 
-import Post from "../../components/Home/Post";
-import VideoPost from "../../components/Home/VideoWithLikes";
+import SwipingView from "../../components/Home/SwipingView";
+import Post from "../../components/Home/VideoWithLikes";
 import theme from "../../utils/theme";
 import BottomNavigationBar from "../../components/BottomNavigationBar";
 
@@ -28,7 +28,7 @@ const Home = ({ navigation }) => {
   return (
     <Container>
       <StatusBar style="light" />
-      <Post />
+      <SwipingView />
       <BottomNavigationBar homeScreen />
     </Container>
   );

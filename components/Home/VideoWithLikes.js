@@ -42,7 +42,7 @@ const TouchableWithoutFeedBack = styled.TouchableWithoutFeedback``;
 
 const VideoPost = ({ snapToTop }) => {
   let reference;
-  const [playState, _setPlayState] = React.useState(true);
+  const [playState, _setPlayState] = React.useState(false);
   const [heartState, _setHeartState] = React.useState(true);
   const [likedState, _setlikedState] = React.useState(false);
   const [favorite, _setFavorite] = React.useState(false);
