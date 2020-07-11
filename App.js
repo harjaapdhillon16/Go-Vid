@@ -3,8 +3,11 @@ import * as React from "react";
 import { NavigationContainer } from "@react-navigation/native";
 import { StatusBar } from "expo-status-bar";
 import { DefaultTheme, Provider as PaperProvider } from "react-native-paper";
+import { Provider as ReduxProvider } from "react-redux";
 
-import Navigation from "./Navigation/GlobalNavigation";
+import store from "./src/redux/store";
+
+import Navigation from "./src/Navigation/GlobalNavigation";
 
 const theme = {
   ...DefaultTheme,
@@ -15,14 +18,13 @@ const theme = {
 
 export default function App() {
   return (
-    <>
-      <NavigationContainer>
-        <PaperProvider theme={theme}>
-          <StatusBar style="dark-content" />
+    <NavigationContainer>
+      <PaperProvider theme={theme}>
+        <ReduxProvider store={store}>
+          <StatusBar style="light" />
           <Navigation />
-        </PaperProvider>
-      </NavigationContainer>
-      <StatusBar style="dark-content" />
-    </>
+        </ReduxProvider>
+      </PaperProvider>
+    </NavigationContainer>
   );
 }
