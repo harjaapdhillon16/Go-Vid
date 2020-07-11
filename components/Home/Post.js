@@ -4,12 +4,12 @@ import BottomSheet from "reanimated-bottom-sheet";
 import Animated from "react-native-reanimated";
 import VideoWithLikes from "./VideoWithLikes";
 
-const {height} = Dimensions.get("screen");
+const { height } = Dimensions.get("screen");
 
-const Height = height/2;
+const Height = height / 2;
 
-export default class Example extends React.Component {
-  renderInner = () => (
+export default function Example(props) {
+  const renderInner = () => (
     <View style={styles.panel}>
       <View style={styles.panelButton}>
         <Text style={styles.panelButtonTitle}>Copy</Text>
@@ -29,27 +29,33 @@ export default class Example extends React.Component {
     </View>
   );
 
-  renderHeader = () => <View style={styles.header} />;
+  const renderHeader = () => <View style={styles.header} />;
 
-  fall = new Animated.Value(0);
-  bs = React.createRef();
-  snapToTop() {}
-  render() {
+  const fall = new Animated.Value(0);
+  const bs = React.createRef();
+ 
     return (
       <View style={styles.container}>
         <BottomSheet
-          ref={this.bs}
-          snapPoints={[Height+200,Height, 0]}
-          renderContent={this.renderInner}
+          ref={bs}
+          snapPoints={[Height + 200, Height, 0]}
+          renderContent={renderInner}
           initialSnap={2}
-          callbackNode={this.fall}
+          callbackNode={fall}
           enabledInnerScrolling={true}
         />
 
-        <VideoWithLikes snapToTop={() => this.bs.current.snapTo(1)} />
+        <VideoWithLikes
+          index={props.index}
+          playing={props.playing}
+          username={props.username}
+          link={props.link}
+          navigation={props.navigation}
+          snapToTop={() => bs.current.snapTo(1)}
+        />
       </View>
     );
-  }
+  
 }
 
 const IMAGE_SIZE = 200;
@@ -57,7 +63,7 @@ const IMAGE_SIZE = 200;
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#2c2c2f",
+    backgroundColor: "#000",
   },
   box: {
     width: IMAGE_SIZE,

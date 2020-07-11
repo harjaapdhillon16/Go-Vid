@@ -28,7 +28,7 @@ const Home = ({ navigation }) => {
   return (
     <Container>
       <StatusBar style="light" />
-      <SwipingView />
+      <SwipingView  />
       <BottomNavigationBar homeScreen />
     </Container>
   );

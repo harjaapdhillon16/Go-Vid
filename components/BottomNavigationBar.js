@@ -13,7 +13,7 @@ const Container = styled.View`
   bottom: 0;
   padding-bottom: 5px;
   background-color: ${(props) =>
-    props.homeScreen ? "transparent" : theme.lightBlack};
+  props.homeScreen ? "transparent" : theme.lightBlack};
   border: 0px solid ${theme.grey};
   border-top-width: 0.3px;
   padding-top: 5px;
