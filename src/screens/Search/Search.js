@@ -3,6 +3,7 @@ import styled from "styled-components/native";
 import { Title } from "react-native-paper";
 import { Searchbar } from "react-native-paper";
 import { StatusBar, setStatusBarHidden } from "expo-status-bar";
+import Constants  from 'expo-constants'
 
 import theme from "../../utils/theme";
 import BottomNavigationBar from "../../components/BottomNavigationBar";
@@ -10,7 +11,7 @@ import BottomNavigationBar from "../../components/BottomNavigationBar";
 const Container = styled.View`
   background-color: ${theme.black};
   flex: 1;
-  padding-top: 25px;
+  padding-top: ${Constants.statusBarHeight+5}px;
 `;
 
 const Heading = styled(Title)`

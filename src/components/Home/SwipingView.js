@@ -19,6 +19,7 @@ const Data = [
   {
     link: "../../assets/video2.mp4",
     username: "harjaap_dhillon_",
+    caption:'life is incredible'
   },
 ];
 
@@ -42,6 +43,7 @@ const SwipingView = () => {
           index={index}
           link={item.link}
           username={item.username}
+          caption={item.caption}
         />
       ))}
     </Swiper>

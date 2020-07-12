@@ -42,9 +42,9 @@ const DetailsView = styled.View`
   align-self: center;
   margin-top: 10px;
   padding: 10px 0px;
-  margin-right:2px;
-  margin-left:2px;
-  border-radius:5px;
+  margin-right: 2px;
+  margin-left: 2px;
+  border-radius: 5px;
 `;
 const DetailsText = styled(Text)`
   color: ${theme.white};
@@ -58,9 +58,21 @@ const DetailsText2 = styled(Text)`
 `;
 
 const RowView2 = styled(RowView)`
-    align-self:center;
-`
+  align-self: center;
+`;
+const DetailsView2 = styled(DetailsView)`
+  width: 92%;
+  align-self: center;
+  margin: 0px;
+  align-items:center;
+  margin-top: 10px;
+`;
 
+const BioText = styled(DetailsText2)`
+  font-weight: normal;
+  font-size:15px;
+  text-align:center;
+`;
 
 const ProfileCard = () => {
   return (
@@ -93,6 +105,9 @@ const ProfileCard = () => {
           <DetailsText2>100</DetailsText2>
         </DetailsView>
       </RowView2>
+      <DetailsView2>
+        <BioText>16 year old boy from california. Enjoying Life</BioText>
+      </DetailsView2>
     </>
   );
 };

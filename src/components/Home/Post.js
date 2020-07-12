@@ -41,12 +41,14 @@ export default function Example(props) {
           snapPoints={[Height + 200, Height, 0]}
           renderContent={renderInner}
           initialSnap={2}
+          renderHeader={renderHeader}
           callbackNode={fall}
           enabledInnerScrolling={true}
         />
 
         <VideoWithLikes
           index={props.index}
+          caption={props.caption}
           username={props.username}
           link={props.link}
           navigation={props.navigation}

@@ -5,8 +5,8 @@ import { setStatusBarHidden, StatusBar } from "expo-status-bar";
 import Constants from "expo-constants";
 
 import ProfileCard from "../../components/Profile/ProfileCard";
-import ProfileActions from "../../components/Profile/ProfileActions";
 import ProfileMedia from "../../components/Profile/ProfileMedia";
+import UserProfileActions from "../../components/UserProfile/UserProfileActions";
 
 import theme from "../../utils/theme";
 import BottomNavigationBar from "../../components/BottomNavigationBar";
@@ -32,10 +32,9 @@ const Profile = ({ navigation }) => {
       <StatusBar style="light" />
       <ScrollView>
         <ProfileCard />
-        <ProfileActions />
+        <UserProfileActions/>
         <ProfileMedia />
       </ScrollView>
-      <BottomNavigationBar />
     </Container>
   );
 };

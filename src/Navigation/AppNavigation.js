@@ -10,6 +10,7 @@ import Profile from "../screens/Profile/Profile";
 
 import EditProfile from "../screens/Profile/EditProfile";
 import Settings from "../screens/Profile/Settings";
+import UserProfile from "../screens/UserProfile/UserProfile";
 
 const Stack = createBottomTabNavigator();
 const Stack2 = createStackNavigator();
@@ -42,6 +43,7 @@ const AppNavigation2 = () => {
         component={UploadCombine}
       />
       <Stack2.Screen name="settings" component={Settings} />
+      <Stack2.Screen name="userProfile" component={UserProfile} />
     </Stack2.Navigator>
   );
 };
