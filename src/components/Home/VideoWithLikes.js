@@ -11,18 +11,18 @@ import theme from "../../utils/theme";
 import VideoIconsAndText from "./VideoIconsAndText";
 
 const VideoStyled = styled(Video)`
-  height: ${Dimensions.get('screen').height}px;
+  height: ${Dimensions.get("screen").height}px;
   width: 100%;
   position: absolute;
   top: 0;
   left: 0;
 `;
 const Container = styled.View`
-  height: ${Dimensions.get('screen').height}px;
+  height: ${Dimensions.get("screen").height}px;
 `;
 
 const VideoView = styled.View`
-  height: ${Dimensions.get('screen').height}px;
+  height: ${Dimensions.get("screen").height}px;
 `;
 
 const PlayIcon = styled(MaterialIcons)`
@@ -41,7 +41,7 @@ const VideoPost = ({ index, link, username, snapToTop, caption }) => {
   const [heartState, _setHeartState] = React.useState(true);
   const [likedState, _setLikedState] = React.useState(false);
   const [playing, _setPlaying] = React.useState(false);
-
+  const [initialLoad, _setInitialLoading] = React.useState(true);
   const IndexState = useSelector((state) => state.no);
 
   const Navigation = useNavigation();
@@ -52,7 +52,7 @@ const VideoPost = ({ index, link, username, snapToTop, caption }) => {
     if (IndexState === index) {
       _setPlayState(true);
       _setPlaying(true);
-      reference.playAsync();
+
     }
   });
   React.useEffect(() => {
@@ -60,9 +60,11 @@ const VideoPost = ({ index, link, username, snapToTop, caption }) => {
       _setPlaying(true);
       _setPlayState(true);
       reference.playAsync();
+      _setInitialLoading(false);
     } else {
       reference.pauseAsync();
       _setPlaying(false);
+      _setInitialLoading(false);
     }
   }, [IndexState]);
 
