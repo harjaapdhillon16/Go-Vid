@@ -46,13 +46,13 @@ const VideoPost = ({ index, link, username, snapToTop, caption }) => {
 
   const Navigation = useNavigation();
   Navigation.addListener("blur", () => {
-    _setPlayState(false);
     _setPlaying(false);
   });
   Navigation.addListener("focus", () => {
     if (IndexState === index) {
       _setPlayState(true);
       _setPlaying(true);
+      reference.playAsync();
     }
   });
   React.useEffect(() => {
