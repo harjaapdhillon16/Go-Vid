@@ -3,9 +3,13 @@ import styled from "styled-components/native";
 import MaterialIcons from "react-native-vector-icons/MaterialIcons";
 import { Text, Snackbar } from "react-native-paper";
 import { useNavigation } from "@react-navigation/native";
+import { Dimensions, Platform } from "react-native";
 
 import theme from "../../utils/theme";
 import { Video } from "expo-av";
+
+const { width } = Dimensions.get("screen");
+
 const ProfileImage = styled.Image`
   border-radius: 100px;
   width: 40px;
@@ -16,7 +20,7 @@ const ProfileImage = styled.Image`
 const TextView = styled.View`
   position: absolute;
   left: 5px;
-  bottom: 50px;
+  bottom: ${Platform.OS === "android" ? "14%" : "50px"};
 `;
 const Username = styled(Text)`
   font-weight: bold;
@@ -27,12 +31,12 @@ const Username = styled(Text)`
 const Captions = styled(Text)`
   font-size: 12px;
   color: ${theme.white};
-  width: 75%;
+  width: ${(width * 75) / 100}px;
   margin-top: ${(props) => (props.caption ? "2px" : "0px")};
 `;
 const IconView = styled.View`
   position: absolute;
-  bottom: 10%;
+  bottom: ${Platform.OS === "android" ? "20%" : "10%"};
   right: 5px;
 `;
 const Icons = styled(MaterialIcons)`
@@ -100,8 +104,13 @@ const VideoIconsAndText = ({
             _setFavoriteState(!favorite);
           },
         }}
-        duration={600}
-        style={{ width: "90%", zIndex: 4, elevation: 3, marginBottom: 50 }}
+        duration={1000}
+        style={{
+          width: "90%",
+          zIndex: 4,
+          elevation: 3,
+          marginBottom: Platform.OS === "android" ? "55%" : 50,
+        }}
       >
         Added to Favorites
       </Snackbar>

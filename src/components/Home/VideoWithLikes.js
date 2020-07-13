@@ -2,7 +2,7 @@ import React from "react";
 import styled from "styled-components/native";
 import { Video } from "expo-av";
 import MaterialIcons from "react-native-vector-icons/MaterialIcons";
-import { Text } from "react-native-paper";
+import { Dimensions } from "react-native";
 import { useSelector } from "react-redux";
 import { useNavigation } from "@react-navigation/native";
 
@@ -11,18 +11,18 @@ import theme from "../../utils/theme";
 import VideoIconsAndText from "./VideoIconsAndText";
 
 const VideoStyled = styled(Video)`
-  height: 100%;
+  height: ${Dimensions.get('screen').height}px;
   width: 100%;
   position: absolute;
   top: 0;
   left: 0;
 `;
 const Container = styled.View`
-  flex: 1;
+  height: ${Dimensions.get('screen').height}px;
 `;
 
 const VideoView = styled.View`
-  flex: 1;
+  height: ${Dimensions.get('screen').height}px;
 `;
 
 const PlayIcon = styled(MaterialIcons)`

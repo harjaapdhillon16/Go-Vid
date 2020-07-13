@@ -15,11 +15,13 @@ const Container = styled.View`
 `;
 const EditProfile = styled(Button)`
   background-color: ${theme.primaryColor};
-  margin-right: 5px;
+  margin-right: 2px;
+  width:55%;
 `;
 const Settings = styled(Button)`
-  margin-left: 5px;
+  margin-left: 2px;
   background-color: ${theme.red};
+  width:45%;
 `;
 
 const ProfileActions = () => {

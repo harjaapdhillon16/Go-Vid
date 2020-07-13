@@ -19,9 +19,7 @@ const ScrollView = styled.ScrollView`
   margin-top: ${Constants.statusBarHeight}px;
 `;
 
-const Heading = styled(Title)`
-  color: ${theme.white};
-`;
+
 
 const Profile = ({ navigation }) => {
   React.useEffect(() => {
@@ -32,7 +30,7 @@ const Profile = ({ navigation }) => {
       <StatusBar style="light" />
       <ScrollView>
         <ProfileCard />
-        <UserProfileActions/>
+        <UserProfileActions />
         <ProfileMedia />
       </ScrollView>
     </Container>

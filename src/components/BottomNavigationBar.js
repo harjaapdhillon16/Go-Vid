@@ -3,8 +3,7 @@ import styled from "styled-components";
 import { useNavigation } from "@react-navigation/native";
 import MaterialDesign from "react-native-vector-icons/MaterialIcons";
 import theme from "../utils/theme";
-import { TouchableWithoutFeedback } from "react-native";
-
+import { TouchableWithoutFeedback, Platform } from "react-native";
 
 const Container = styled.View`
   width: 100%;
@@ -13,21 +12,26 @@ const Container = styled.View`
   bottom: 0;
   padding-bottom: 5px;
   background-color: ${(props) =>
-  props.homeScreen ? "transparent" : theme.lightBlack};
+    props.homeScreen ? "transparent" : theme.lightBlack};
   border: 0px solid ${theme.grey};
   border-top-width: 0.3px;
   padding-top: 5px;
+  transform: ${(props) =>
+    props.homeScreen
+      ? Platform.OS === "android"
+        ? "translateY(-50px)"
+        : ""
+      : ""};
 `;
 const IconView = styled.View`
   width: 20%;
   align-items: center;
 `;
 
-const BottomNavigationBar = ({ homeScreen }) => {
-
+const BottomNavigationBar = ({ homeScreen, androidHomeScreen }) => {
   const navigation = useNavigation();
   return (
-    <Container homeScreen={homeScreen}>
+    <Container androidHomeScreen={androidHomeScreen} homeScreen={homeScreen}>
       <TouchableWithoutFeedback onPress={() => navigation.navigate("home")}>
         <IconView>
           <MaterialDesign
@@ -46,7 +50,9 @@ const BottomNavigationBar = ({ homeScreen }) => {
           />
         </IconView>
       </TouchableWithoutFeedback>
-      <TouchableWithoutFeedback onPress={() => navigation.navigate("UploadCombine")}>
+      <TouchableWithoutFeedback
+        onPress={() => navigation.navigate("UploadCombine")}
+      >
         <IconView>
           <MaterialDesign name="backup" color={theme.primaryColor} size={30} />
         </IconView>

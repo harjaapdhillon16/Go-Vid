@@ -17,6 +17,11 @@ const FollowButton = styled(Button)`
   align-self: center;
   background-color: ${theme.red};
 `;
+
+const FollowingButton = styled(FollowButton)`
+  background-color: ${theme.primaryColor};
+`;
+
 const Back = styled(Button)`
   width: 40%;
   align-self: center;
@@ -37,13 +42,34 @@ const RowView = styled.View`
   align-self: center;
 `;
 
-const UserProfileActions = () => {
-  const Navigation = useNavigation();
-  return (
-    <Container>
-      <FollowButton labelStyle={{ fontWeight: "bold" }} mode="contained">
+const Follow = ({ following, _setFollowing }) => (
+  <>
+    {following ? (
+      <FollowingButton
+        labelStyle={{ fontWeight: "bold", color: theme.black }}
+        mode="contained"
+        onPress={()=>_setFollowing(false)}
+      >
+        Following
+      </FollowingButton>
+    ) : (
+      <FollowButton
+        onPress={()=>_setFollowing(true)}
+        labelStyle={{ fontWeight: "bold" }}
+        mode="contained"
+      >
         Follow
       </FollowButton>
+    )}
+  </>
+);
+
+const UserProfileActions = () => {
+  const Navigation = useNavigation();
+  const [following, _setFollowing] = React.useState(true);
+  return (
+    <Container>
+      <Follow following={following} _setFollowing={_setFollowing} />
       <RowView>
         <Back onPress={() => Navigation.goBack()} mode="contained">
           Back

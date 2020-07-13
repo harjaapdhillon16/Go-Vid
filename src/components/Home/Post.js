@@ -2,68 +2,57 @@ import React from "react";
 import { Dimensions, StyleSheet, Text, View } from "react-native";
 import BottomSheet from "reanimated-bottom-sheet";
 import Animated from "react-native-reanimated";
+
 import VideoWithLikes from "./VideoWithLikes";
+import Comments from "../SharedComponents/Comments";
 
 const { height } = Dimensions.get("screen");
 
-const Height = height / 2;
+const Height = height -50;
 
 export default function Example(props) {
   const renderInner = () => (
-    <View style={styles.panel}>
-      <View style={styles.panelButton}>
-        <Text style={styles.panelButtonTitle}>Copy</Text>
-      </View>
-      <View style={styles.panelButton}>
-        <Text style={styles.panelButtonTitle}>Paste</Text>
-      </View>
-      <View style={styles.panelButton}>
-        <Text style={styles.panelButtonTitle}>Crop</Text>
-      </View>
-      <View style={styles.panelButton}>
-        <Text style={styles.panelButtonTitle}>Search</Text>
-      </View>
-      <View style={styles.panelButton}>
-        <Text style={styles.panelButtonTitle}>Send</Text>
+    <View>
+      <View style={styles.panel}>
+        <Comments />
       </View>
     </View>
   );
 
-  const renderHeader = () => <View style={styles.header} />;
+  const renderHeader = () => <View style={styles.panelContainer}></View>;
 
   const fall = new Animated.Value(0);
   const bs = React.createRef();
- 
-    return (
-      <View style={styles.container}>
-        <BottomSheet
-          ref={bs}
-          snapPoints={[Height + 200, Height, 0]}
-          renderContent={renderInner}
-          initialSnap={2}
-          renderHeader={renderHeader}
-          callbackNode={fall}
-          enabledInnerScrolling={true}
-        />
 
-        <VideoWithLikes
-          index={props.index}
-          caption={props.caption}
-          username={props.username}
-          link={props.link}
-          navigation={props.navigation}
-          snapToTop={() => bs.current.snapTo(1)}
-        />
-      </View>
-    );
-  
+  return (
+    <View style={styles.container}>
+      <BottomSheet
+        ref={bs}
+        snapPoints={[Height , 0]}
+        renderContent={renderInner}
+        initialSnap={1}
+        renderHeader={renderHeader}
+        callbackNode={fall}
+        enabledInnerScrolling={true}
+      />
+
+      <VideoWithLikes
+        index={props.index}
+        caption={props.caption}
+        username={props.username}
+        link={props.link}
+        navigation={props.navigation}
+        snapToTop={() => bs.current.snapTo(0)}
+      />
+    </View>
+  );
 }
 
 const IMAGE_SIZE = 200;
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
+    height: height,
     backgroundColor: "#000",
   },
   box: {
@@ -78,7 +67,7 @@ const styles = StyleSheet.create({
     right: 0,
   },
   panel: {
-    height: 600,
+    height: height -10,
     padding: 20,
     backgroundColor: "#000",
     paddingTop: 20,
@@ -121,14 +110,5 @@ const styles = StyleSheet.create({
     fontSize: 17,
     fontWeight: "bold",
     color: "white",
-  },
-  photo: {
-    width: "100%",
-    height: 225,
-    marginTop: 30,
-  },
-  map: {
-    height: "100%",
-    width: "100%",
   },
 });

@@ -18,9 +18,8 @@ const Container = styled.View`
 const ScrollView = styled.ScrollView`
   margin-top: ${Constants.statusBarHeight}px;
 `;
-
-const Heading = styled(Title)`
-  color: ${theme.white};
+const View40 = styled.View`
+  height: 40px;
 `;
 
 const Profile = ({ navigation }) => {
@@ -34,6 +33,7 @@ const Profile = ({ navigation }) => {
         <ProfileCard />
         <ProfileActions />
         <ProfileMedia />
+        <View40 />
       </ScrollView>
       <BottomNavigationBar />
     </Container>
