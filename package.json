@@ -19,9 +19,13 @@
     "expo-constants": "~9.1.1",
     "expo-image-picker": "~8.3.0",
     "expo-permissions": "~9.0.1",
+<<<<<<< HEAD
     "expo-secure-store": "~9.0.1",
     "expo-status-bar": "^1.0.2",
     "firebase": "7.9.0",
+=======
+    "expo-status-bar": "^1.0.2",
+>>>>>>> 22dabafa333bfc15f8c5cda0521d4226053cbe23
     "lodash.debounce": "^4.0.8",
     "react": "~16.11.0",
     "react-dom": "~16.11.0",

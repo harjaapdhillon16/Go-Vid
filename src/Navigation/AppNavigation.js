@@ -12,8 +12,11 @@ import EditProfile from "../screens/Profile/EditProfile";
 import Settings from "../screens/Profile/Settings";
 import UserProfile from "../screens/UserProfile/UserProfile";
 
+<<<<<<< HEAD
 import SignUp from "../screens/Auth/SignUpNavigator";
 
+=======
+>>>>>>> 22dabafa333bfc15f8c5cda0521d4226053cbe23
 const Stack = createBottomTabNavigator();
 const Stack2 = createStackNavigator();
 
@@ -46,7 +49,10 @@ const AppNavigation2 = () => {
       />
       <Stack2.Screen name="settings" component={Settings} />
       <Stack2.Screen name="userProfile" component={UserProfile} />
+<<<<<<< HEAD
       <Stack.Screen name="signup" component={SignUp} />
+=======
+>>>>>>> 22dabafa333bfc15f8c5cda0521d4226053cbe23
     </Stack2.Navigator>
   );
 };
