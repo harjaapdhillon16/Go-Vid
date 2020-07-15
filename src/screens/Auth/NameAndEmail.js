@@ -3,11 +3,18 @@ import styled from "styled-components/native";
 import { Text, Button } from "react-native-paper";
 import Constants from "expo-constants";
 import MaterialIcons from "react-native-vector-icons/MaterialIcons";
-import { Alert } from "react-native";
-import * as SecureStore from 'expo-secure-store';
+import { Alert ,Platform} from "react-native";
+import * as SecureStore from "expo-secure-store";
 
 
 import theme from "../../utils/theme";
+
+function ValidateEmail(email) {
+  if (/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(email)) {
+    return true;
+  }
+  return false;
+}
 
 const Container = styled.View`
   flex: 1;
@@ -35,6 +42,7 @@ const GetStarted = styled(Button)`
 const ScrollView = styled.ScrollView`
   flex: 1;
   padding-top: 10%;
+  margin-top: ${Constants.statusBarHeight}px;
 `;
 const Heading = styled(Text)`
   color: ${theme.white};
@@ -64,7 +72,7 @@ const NameAndEmail = ({ navigation }) => {
   const [name, _setName] = React.useState("");
   const [email, _setEmail] = React.useState("");
   const GetStartedFunction = () => {
-    if (email || name === "") {
+    if (email === "" || name === "") {
       return Alert.alert(
         "Go-Vid",
         "Please Provide your both email and name.",
@@ -76,10 +84,22 @@ const NameAndEmail = ({ navigation }) => {
         ],
         { cancelable: false }
       );
+    } else if (!ValidateEmail(email)) {
+      return Alert.alert(
+        "Go-Vid",
+        "Please provide a valid email.",
+        [
+          {
+            text: "OK",
+            style: "cancel",
+          },
+        ],
+        { cancelable: false }
+      );
     } else {
-        SecureStore.setItemAsync('name',name);
-        SecureStore.setItemAsync('email',email);
-        navigation.navigate('')
+      SecureStore.setItemAsync("name", name);
+      SecureStore.setItemAsync("email", email.toLowerCase());
+      navigation.navigate("UsernameAndPassword");
     }
   };
   return (
@@ -94,7 +114,7 @@ const NameAndEmail = ({ navigation }) => {
         <Icons
           onPress={() => navigation.goBack()}
           color={theme.white}
-          size={30}
+          size={40}
           name="add-circle"
         />
         <Heading>Signup</Heading>
@@ -103,12 +123,15 @@ const NameAndEmail = ({ navigation }) => {
           value={name}
           placeholderTextColor={theme.grey}
           onChangeText={(e) => _setName(e)}
+          keyboardType={Platform.OS === 'ios' ? 'ascii-capable' : 'visible-password'}
         />
         <Input
           placeholder="Email"
           value={email}
           onChangeText={(e) => _setEmail(e)}
           placeholderTextColor={theme.grey}
+          keyboardType={Platform.OS === 'ios' ? 'ascii-capable' : 'email'}
+          autoCapitalize = 'none'
         />
         <Touch onPress={() => GetStartedFunction()}>
           <GetStarted labelStyle={{ fontWeight: "bold", color: theme.black }}>

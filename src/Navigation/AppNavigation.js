@@ -46,7 +46,11 @@ const AppNavigation2 = () => {
       />
       <Stack2.Screen name="settings" component={Settings} />
       <Stack2.Screen name="userProfile" component={UserProfile} />
-      <Stack.Screen name="signup" component={SignUp} />
+      <Stack.Screen
+        options={{ gestureEnabled: false }}
+        name="signup"
+        component={SignUp}
+      />
     </Stack2.Navigator>
   );
 };
