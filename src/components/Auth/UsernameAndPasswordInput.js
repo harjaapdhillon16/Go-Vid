@@ -4,11 +4,13 @@ import { Text, Button, ActivityIndicator } from "react-native-paper";
 import Constants from "expo-constants";
 import { Platform } from "react-native";
 import MaterialIcons from "react-native-vector-icons/MaterialIcons";
-import { Alert } from "react-native";
+import { Alert, Keyboard } from "react-native";
+import firebase from "../../../config";
 import * as SecureStore from "expo-secure-store";
 import Lodash from "lodash.debounce";
 
 import UsernameApi from "../../api/usernameApi";
+import UserCreate from "../../api/userCreate";
 import theme from "../../utils/theme";
 
 const Input = styled.TextInput`
@@ -27,6 +29,7 @@ const GetStarted = styled(Button)`
   border-radius: 10px;
   justify-content: center;
   background-color: ${theme.primaryColor};
+  
 `;
 
 const ScrollView = styled.ScrollView`
@@ -93,6 +96,10 @@ const TextView = styled.View`
 
 const Touch = styled.TouchableWithoutFeedback``;
 
+const ViewButton = styled.View`
+  flex-direction: row;
+`;
+
 const SuccessText = () => {
   return (
     <Text style={{ color: theme.primaryColor, fontSize: 12 }}>
@@ -121,11 +128,78 @@ class UsernameAndPasswordInput extends React.Component {
       username: "",
       passwordVisible: true,
       confirmPasswordVisible: true,
+      loader:'none'
     };
   }
-  Submit() {
+  async Submit() {
+    const { password, confirmPassword, status, username } = this.state;
     const { navigation } = this.props;
-    navigation.navigate("ProfilePicture");
+    if (password.length <= 5) {
+      return Alert.alert(
+        "Go-Vid",
+        "Please create a password bigger than 6 characters",
+        [
+          {
+            text: "OK",
+            style: "cancel",
+          },
+        ],
+        { cancelable: false }
+      );
+    }
+    if (password !== confirmPassword) {
+      return Alert.alert(
+        "Go-Vid",
+        "Password and confirmed passwords don't match",
+        [
+          {
+            text: "OK",
+            style: "cancel",
+          },
+        ],
+        { cancelable: false }
+      );
+    }
+    if (!status) {
+      return Alert.alert(
+        "Go-Vid",
+        "Please use a valid username",
+        [
+          {
+            text: "OK",
+            style: "cancel",
+          },
+        ],
+        { cancelable: false }
+      );
+    }
+    const email = await SecureStore.getItemAsync("email");
+    const name = await SecureStore.getItemAsync("name");
+    Keyboard.dismiss();
+    firebase
+      .auth()
+      .createUserWithEmailAndPassword(email, password)
+      .then(async (user) => {
+        this.setState({loader:""})
+        const uid = user.user.uid;
+        await SecureStore.setItemAsync("user", uid);
+        UserCreate(email, uid, name, username);
+        navigation.navigate("ProfilePicture");
+      })
+      .catch((err) => {
+        Alert.alert(
+          "Go-Vid",
+          `${err}`,
+          [
+            {
+              text: "OK",
+              style: "cancel",
+              onPress: () => navigation.navigate("homeApp", { screen: "home" }),
+            },
+          ],
+          { cancelable: false }
+        );
+      });
   }
 
   ApiUsername = async (user) => {
@@ -208,7 +282,7 @@ class UsernameAndPasswordInput extends React.Component {
             value={this.state.username}
             onChangeText={(e) => this.UsernameCheck(e)}
             placeholderTextColor={theme.grey}
-            maxLength={15}
+            maxLength={20}
             keyboardType={
               Platform.OS === "ios" ? "ascii-capable" : "visible-password"
             }
@@ -220,9 +294,12 @@ class UsernameAndPasswordInput extends React.Component {
         </UsernameView>
         <TextView>{this.state.success}</TextView>
         <Touch onPress={() => this.Submit()}>
-          <GetStarted labelStyle={{ fontWeight: "bold", color: theme.black }}>
-            Confirm
-          </GetStarted>
+          <ViewButton>
+            <GetStarted labelStyle={{ fontWeight: "bold", color: theme.black }}>
+              Confirm
+            </GetStarted>
+            <LoadingIndicator animating={true} style={{display:this.state.loader}} color={theme.primaryColor} />
+          </ViewButton>
         </Touch>
         <View />
       </>
