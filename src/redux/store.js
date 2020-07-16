@@ -1,5 +1,13 @@
-import { createStore } from "redux";
+import { createStore, combineReducers } from "redux";
 
 import HomeReducer from "./HomeFeed/HomeReducer";
+import AuthReducer from "./Auth/AuthReducer";
+import ProfileReducer from "./ProfileDetails/ProfileReducers";
 
-export default createStore(HomeReducer);
+const RootReducer = combineReducers({
+  home: HomeReducer,
+  auth: AuthReducer,
+  profile: ProfileReducer,
+});
+
+export default createStore(RootReducer);

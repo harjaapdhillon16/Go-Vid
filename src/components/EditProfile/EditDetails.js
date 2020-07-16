@@ -26,14 +26,17 @@ const SmallText = styled(Text)`
 `;
 const MultipleLines = styled(ReactInput)`
   background-color: ${theme.lightBlack};
-  width:80%;
-  align-self:center;
-  padding:10px;
-  color:${theme.white};
-  padding-left:20px;
+  width: 80%;
+  align-self: center;
+  padding: 10px;
+  color: ${theme.white};
+  padding-left: 20px;
 `;
 
-const EditDetails = () => {
+const EditDetails = ({ name, username, bio }) => {
+  const [nameState, _setName] = React.useState(name);
+  const [usernameState, _setUsername] = React.useState(username);
+  const [bioState, _setBio] = React.useState(bio);
   return (
     <Container>
       <SmallText>Name</SmallText>
@@ -45,7 +48,7 @@ const EditDetails = () => {
             underlineColor: theme.white,
           },
         }}
-        value={"ClayJensen"}
+        value={nameState}
       />
       <SmallText style={{ paddingTop: 10 }}>Username</SmallText>
       <Input
@@ -56,10 +59,10 @@ const EditDetails = () => {
             underlineColor: theme.white,
           },
         }}
-        value={"@clay_jensen"}
+        value={usernameState}
       />
       <SmallText style={{ paddingTop: 10 }}>Bio</SmallText>
-      <MultipleLines multiline={true} numberOfLines={4} />
+      <MultipleLines multiline={true} numberOfLines={4} value={bioState} />
     </Container>
   );
 };

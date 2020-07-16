@@ -29,7 +29,6 @@ const GetStarted = styled(Button)`
   border-radius: 10px;
   justify-content: center;
   background-color: ${theme.primaryColor};
-  
 `;
 
 const ScrollView = styled.ScrollView`
@@ -128,7 +127,7 @@ class UsernameAndPasswordInput extends React.Component {
       username: "",
       passwordVisible: true,
       confirmPasswordVisible: true,
-      loader:'none'
+      loader: "none",
     };
   }
   async Submit() {
@@ -180,7 +179,9 @@ class UsernameAndPasswordInput extends React.Component {
       .auth()
       .createUserWithEmailAndPassword(email, password)
       .then(async (user) => {
-        this.setState({loader:""})
+        if (Platform.OS === "ios") {
+          this.setState({ loader: "block" });
+        }
         const uid = user.user.uid;
         await SecureStore.setItemAsync("user", uid);
         UserCreate(email, uid, name, username);
@@ -240,9 +241,7 @@ class UsernameAndPasswordInput extends React.Component {
             value={this.state.password}
             placeholderTextColor={theme.grey}
             onChangeText={(e) => this.setState({ password: e })}
-            keyboardType={
-              Platform.OS === "ios" ? "ascii-capable" : "visible-password"
-            }
+            keyboardType={Platform.OS === "ios" ? "ascii-capable" : "default"}
             autoCapitalize="none"
             secureTextEntry={passwordVisible}
           />
@@ -261,9 +260,7 @@ class UsernameAndPasswordInput extends React.Component {
             value={this.state.confirmPassword}
             onChangeText={(e) => this.setState({ confirmPassword: e })}
             placeholderTextColor={theme.grey}
-            keyboardType={
-              Platform.OS === "ios" ? "ascii-capable" : "visible-password"
-            }
+            keyboardType={Platform.OS === "ios" ? "ascii-capable" : "default"}
             secureTextEntry={confirmPasswordVisible}
             autoCapitalize="none"
           />
@@ -298,7 +295,11 @@ class UsernameAndPasswordInput extends React.Component {
             <GetStarted labelStyle={{ fontWeight: "bold", color: theme.black }}>
               Confirm
             </GetStarted>
-            <LoadingIndicator animating={true} style={{display:this.state.loader}} color={theme.primaryColor} />
+            <LoadingIndicator
+              animating={true}
+              style={{ display: this.state.loader }}
+              color={theme.primaryColor}
+            />
           </ViewButton>
         </Touch>
         <View />
@@ -306,4 +307,7 @@ class UsernameAndPasswordInput extends React.Component {
     );
   }
 }
+
+
+
 export default UsernameAndPasswordInput;

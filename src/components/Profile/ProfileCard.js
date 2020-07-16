@@ -2,6 +2,9 @@ import React from "react";
 import styled from "styled-components/native";
 import { Dimensions, View } from "react-native";
 import { Text } from "react-native-paper";
+import { useSelector } from "react-redux";
+
+import firebase from "../../../config";
 
 import theme from "../../utils/theme";
 
@@ -64,50 +67,52 @@ const DetailsView2 = styled(DetailsView)`
   width: 92%;
   align-self: center;
   margin: 0px;
-  align-items:center;
+  align-items: center;
   margin-top: 10px;
 `;
 
 const BioText = styled(DetailsText2)`
   font-weight: normal;
-  font-size:15px;
-  text-align:center;
+  font-size: 15px;
+  text-align: center;
 `;
 
 const ProfileCard = () => {
+  const data = useSelector((state) => state.profile);
   return (
     <>
       <Container>
         <RowView>
           <Image
             source={{
-              uri:
-                "https://66.media.tumblr.com/ad73b240df8cc0eb0f0b13bba0446481/tumblr_oqn0g0qWeI1tc6asro8_400.png",
+              uri: data.uri,
             }}
           />
           <View>
-            <Name>Clay Jensen</Name>
-            <Username>@clay_jensen</Username>
+            <Name>{data.name}</Name>
+            <Username>@{data.username}</Username>
           </View>
         </RowView>
       </Container>
       <RowView2>
         <DetailsView>
           <DetailsText>Followers</DetailsText>
-          <DetailsText2>20m</DetailsText2>
+          <DetailsText2>{data.followers}</DetailsText2>
         </DetailsView>
         <DetailsView>
           <DetailsText>Following</DetailsText>
-          <DetailsText2>20</DetailsText2>
+          <DetailsText2>{data.following}</DetailsText2>
         </DetailsView>
         <DetailsView>
           <DetailsText>Likes</DetailsText>
-          <DetailsText2>100</DetailsText2>
+          <DetailsText2>{data.following}</DetailsText2>
         </DetailsView>
       </RowView2>
-      <DetailsView2>
-        <BioText>16 year old boy from california. Enjoying Life</BioText>
-      </DetailsView2>
+      {data.bio === "" ? null : (
+        <DetailsView2>
+          <BioText>16 year old boy from california. Enjoying Life</BioText>
+        </DetailsView2>
+      )}
     </>
   );
 };

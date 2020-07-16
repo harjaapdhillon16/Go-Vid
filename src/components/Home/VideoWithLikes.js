@@ -2,7 +2,7 @@ import React from "react";
 import styled from "styled-components/native";
 import { Video } from "expo-av";
 import MaterialIcons from "react-native-vector-icons/MaterialIcons";
-import { Dimensions } from "react-native";
+import { Dimensions, Platform } from "react-native";
 import { useSelector } from "react-redux";
 import { useNavigation } from "@react-navigation/native";
 
@@ -42,22 +42,22 @@ const VideoPost = ({ index, link, username, snapToTop, caption }) => {
   const [likedState, _setLikedState] = React.useState(false);
   const [playing, _setPlaying] = React.useState(false);
   const [initialLoad, _setInitialLoading] = React.useState(true);
-  const IndexState = useSelector((state) => state.no);
+  const IndexState = useSelector((state) => state.home.no);
 
   const Navigation = useNavigation();
   Navigation.addListener("blur", () => {
     _setPlaying(false);
+    _setPlayState(false);
   });
   Navigation.addListener("focus", () => {
+    _setPlayState(true);
     if (IndexState === index) {
-      _setPlayState(true);
       _setPlaying(true);
-
     }
   });
+
   React.useEffect(() => {
     if (IndexState === index) {
-      _setPlaying(true);
       _setPlayState(true);
       reference.playAsync();
       _setInitialLoading(false);
@@ -70,7 +70,6 @@ const VideoPost = ({ index, link, username, snapToTop, caption }) => {
 
   const PauseAndPlay = () => {
     playState ? reference.pauseAsync() : reference.playAsync();
-    _setPlaying(!playing);
     _setPlayState(!playState);
   };
 
@@ -101,6 +100,7 @@ const VideoPost = ({ index, link, username, snapToTop, caption }) => {
             ref={(ref) => (reference = ref)}
             source={require("../../assets/video1main.mp4")}
           />
+
           <PlayIcon
             playState={playState}
             size={100}

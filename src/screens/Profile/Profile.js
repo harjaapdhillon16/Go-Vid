@@ -1,9 +1,10 @@
 import React from "react";
 import styled from "styled-components/native";
-import { Title } from "react-native-paper";
 import { setStatusBarHidden, StatusBar } from "expo-status-bar";
 import Constants from "expo-constants";
 import firebase from "../../../config";
+import { useSelector } from "react-redux";
+import * as SecureStore from "expo-secure-store";
 
 import AuthProfile from "../Auth/AuthProfile";
 import ProfileCard from "../../components/Profile/ProfileCard";
@@ -25,15 +26,18 @@ const View40 = styled.View`
 `;
 
 const Profile = ({ navigation }) => {
+  const [data, _setData] = React.useState({});
+
+  const AuthState = useSelector((state) => state.auth.AuthValue);
+
   React.useEffect(() => {
     navigation.addListener("focus", () => {
       setStatusBarHidden(false, "none");
     });
   });
-  if (firebase.auth().currentUser === null) {
-    return (
-      <AuthProfile/>
-    );
+
+  if (AuthState === false) {
+    return <AuthProfile />;
   }
   return (
     <Container>

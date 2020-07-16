@@ -12,7 +12,7 @@ const Image = styled.Image`
   height: ${(width * 50) / 100}px;
   margin: 10px;
   border-radius: 20px;
-  align-self:center;
+  align-self: center;
 `;
 const RowView = styled.View``;
 const EditImageButton = styled(Button)`
@@ -21,16 +21,17 @@ const EditImageButton = styled(Button)`
   margin-left: 5px;
   background-color: ${theme.red};
 `;
-const EditImage = () => {
+const EditImage = ({ uri }) => {
   return (
     <RowView>
       <Image
         source={{
-          uri:
-            "https://66.media.tumblr.com/ad73b240df8cc0eb0f0b13bba0446481/tumblr_oqn0g0qWeI1tc6asro8_400.png",
+          uri: uri,
         }}
       />
-      <EditImageButton labelStyle={{fontWeight:"bold"}} mode="contained">Change Profile Picture</EditImageButton>
+      <EditImageButton labelStyle={{ fontWeight: "bold" }} mode="contained">
+        Change Profile Picture
+      </EditImageButton>
     </RowView>
   );
 };

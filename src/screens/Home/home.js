@@ -4,11 +4,16 @@ import { Title } from "react-native-paper";
 import { setStatusBarHidden, StatusBar } from "expo-status-bar";
 import { Platform, Dimensions } from "react-native";
 import Constants from "expo-constants";
+import * as SecureStore from "expo-secure-store";
+import { useDispatch } from "react-redux";
+import firebase from "../../../config";
 
 import SwipingView from "../../components/Home/SwipingView";
 import Post from "../../components/Home/VideoWithLikes";
 import theme from "../../utils/theme";
 import BottomNavigationBar from "../../components/BottomNavigationBar";
+import AuthAction from "../../redux/Auth/AuthAction";
+import ProfileAction from "../../redux/ProfileDetails/ProfileAction";
 
 const Container = styled.View`
   background-color: ${theme.black};
@@ -23,11 +28,29 @@ const Heading = styled(Title)`
 `;
 
 const Home = ({ navigation }) => {
+  const Dispatch = useDispatch();
+
+  const fetchData = async () => {
+    const uid = await SecureStore.getItemAsync("user");
+    firebase
+      .database()
+      .ref(`/users/${uid}`)
+      .once("value", (snap) => {
+        Dispatch(ProfileAction(snap.val()));
+      });
+  };
   React.useEffect(() => {
+    async function authFunction() {
+      const login = await SecureStore.getItemAsync("login");
+      if (login === "true") {
+        Dispatch(AuthAction(true));
+        fetchData();
+      }
+    }
+    authFunction();
     if (Platform.OS === "ios") {
       navigation.addListener("focus", () => setStatusBarHidden(true, "fade"));
-    } 
-    else{
+    } else {
       navigation.addListener("focus", () => setStatusBarHidden(false, "fade"));
     }
   });

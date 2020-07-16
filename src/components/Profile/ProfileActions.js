@@ -16,29 +16,29 @@ const Container = styled.View`
 const EditProfile = styled(Button)`
   background-color: ${theme.primaryColor};
   margin-right: 2px;
-  width:55%;
+  width: 55%;
 `;
 const Settings = styled(Button)`
   margin-left: 2px;
   background-color: ${theme.red};
-  width:45%;
+  width: 45%;
 `;
 
 const ProfileActions = () => {
-  const Navigation = useNavigation()
+  const Navigation = useNavigation();
   return (
     <Container>
       <EditProfile
         labelStyle={{ fontWeight: "bold", color: theme.black }}
         mode="contained"
-        onPress={() => Navigation.navigate('editProfile')}
+        onPress={() => Navigation.navigate("editProfile")}
       >
         Edit Profile
       </EditProfile>
       <Settings
         labelStyle={{ fontWeight: "bold" }}
         mode="contained"
-        onPress={() => Navigation.navigate('settings')}
+        onPress={() => Navigation.navigate("settings")}
       >
         Settings
       </Settings>
