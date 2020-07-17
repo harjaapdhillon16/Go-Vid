@@ -2,7 +2,7 @@ import React from "react";
 import styled from "styled-components/native";
 import { Video } from "expo-av";
 import { Text } from "react-native-paper";
-import { Dimensions } from "react-native";
+import { Dimensions, Platform } from "react-native";
 
 import theme from "../../utils/theme";
 
@@ -22,10 +22,10 @@ const VideoStyled = styled(Video)`
 const VideoView = styled.View`
   border-radius: 10px;
   margin-top: 20px;
-  height: ${height / 1.5+3}px;
-  width: ${width / 1.5+3}px;
+  height: ${height / 1.5 + 3}px;
+  width: ${width / 1.5 + 3}px;
   align-self: center;
-  border:1px solid ${theme.primaryColor};
+  border: 1px solid ${theme.primaryColor};
 `;
 
 const VideoView2 = styled.View`
@@ -40,11 +40,7 @@ const VideoView2 = styled.View`
 class UploadVideo extends React.Component {
   constructor(props) {
     super(props);
-    this.state = {
-      videoRef: null,
-      index: 0,
-      routes: [],
-    };
+    this.state = {};
   }
 
   async componentDidMount() {}
@@ -52,25 +48,15 @@ class UploadVideo extends React.Component {
   render() {
     return (
       <Container>
-        {this.props.cameraType[this.state.index] ? (
-          <VideoView>
-            <VideoStyled
-              ref={(ref) => (this.vid = ref)}
-              shouldPlay
-              isLooping
-              source={{ uri: this.props.videoRoutes[this.state.index] }}
-            />
-          </VideoView>
-        ) : (
-          <VideoView2>
-            <VideoStyled
-              isLooping
-              ref={(ref) => (this.vid = ref)}
-              shouldPlay
-              source={{ uri: this.props.videoRoutes[this.state.index] }}
-            />
-          </VideoView2>
-        )}
+        <VideoView>
+          <VideoStyled
+            ref={(ref) => (this.vid = ref)}
+            shouldPlay
+            isLooping
+            resizeMode={Platform.OS === "android" ? "contain" : ""}
+            source={{ uri: this.props.videoRoutes[0] }}
+          />
+        </VideoView>
       </Container>
     );
   }

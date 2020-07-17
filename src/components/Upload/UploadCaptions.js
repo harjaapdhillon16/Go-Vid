@@ -30,7 +30,7 @@ const Input = styled(TextInput)`
   padding-left: 10px;
 `;
 
-const UploadCaptions = ({ _setKeyboardOn }) => {
+const UploadCaptions = ({ _setKeyboardOn,caption,setCaption }) => {
   return (
     <Container>
       <Heading>Upload</Heading>
@@ -43,6 +43,8 @@ const UploadCaptions = ({ _setKeyboardOn }) => {
         placeholder="Captions for the Video"
         multiline={true}
         numberOfLines={3}
+        value={caption}
+        onChangeText={(e)=>setCaption(e)}
       />
     </Container>
   );

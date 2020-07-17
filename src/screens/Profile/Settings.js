@@ -3,6 +3,7 @@ import styled from "styled-components/native";
 import { Text } from "react-native-paper";
 import MaterialIcons from "react-native-vector-icons/MaterialIcons";
 import { View } from "react-native";
+import Constants from "expo-constants";
 
 import SettingsOptions from "../../components/Settings/SettingsOptions";
 import theme from "../../utils/theme";
@@ -10,6 +11,7 @@ import theme from "../../utils/theme";
 const Container = styled.View`
   flex: 1;
   background-color: ${theme.lightBlack};
+  padding-top:${Constants.statusBarHeight}px;
 `;
 const Container2 = styled.View`
   flex: 1;
@@ -17,7 +19,7 @@ const Container2 = styled.View`
   width: 90%;
   align-self: center;
   margin-bottom: 5px;
-  margin-top: 25px;
+  margin-top:10px;
   border-radius: 10px;
 `;
 

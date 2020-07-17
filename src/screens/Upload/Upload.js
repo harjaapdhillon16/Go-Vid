@@ -36,6 +36,8 @@ const ScrollView = styled.ScrollView``;
 const Upload = ({ route, navigation }) => {
   const [videoRoutes, _setVideoRoutes] = React.useState([]);
   const [keyboardOn, _setKeyboardOn] = React.useState(false);
+  const [caption, _setCaption] = React.useState("");
+  const [post, _setPost] = React.useState("Post");
 
   const [cameraTypeState, _setCameraTypeState] = React.useState([]);
   React.useEffect(() => {
@@ -44,6 +46,10 @@ const Upload = ({ route, navigation }) => {
       _setCameraTypeState([...route.params.cameraType]);
     }
   }, [route.params]);
+
+  const submit = () => {
+    console.log("aya");
+  };
 
   return (
     <Container
@@ -63,9 +69,15 @@ const Upload = ({ route, navigation }) => {
         >
           <Icon size={30} color={theme.white} name="add-circle" />
         </IconBack>
-        <PostButton mode="contained">Post</PostButton>
+        <PostButton onPress={() => submit()} mode="contained">
+          {post}
+        </PostButton>
 
-        <UploadCaptions _setKeyboardOn={(item) => _setKeyboardOn(item)} />
+        <UploadCaptions
+          Caption={caption}
+          setCaption={(e) => _setCaption(e)}
+          _setKeyboardOn={(item) => _setKeyboardOn(item)}
+        />
         <UploadVideo
           videoRoutes={videoRoutes}
           navigation={navigation}

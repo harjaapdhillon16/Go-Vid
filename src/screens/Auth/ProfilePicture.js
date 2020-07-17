@@ -59,7 +59,6 @@ const ProfilePicture = () => {
   const Navigation = useNavigation();
   const Dispatch = useDispatch();
 
-  
   const [imageUri, _setImageUri] = React.useState(
     "https://progresssoft.imgix.net/default-user.jpg?auto=compress&fit=crop"
   );
@@ -81,6 +80,7 @@ const ProfilePicture = () => {
     });
     AxiosInstance.post("/profilePicture", formData).then(() => {
       SecureStore.setItemAsync("login", "true");
+      SecureStore.setItemAsync("notifications", "false");
       Dispatch(AuthAction(true));
       Navigation.navigate("homeApp", { screen: "profile" });
     });

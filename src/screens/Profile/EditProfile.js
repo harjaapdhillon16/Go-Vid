@@ -114,6 +114,8 @@ const EditProfile = (props) => {
         navigation.goBack();
         update();
       }
+    } else {
+      navigation.goBack();
     }
   };
 

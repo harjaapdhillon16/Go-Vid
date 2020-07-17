@@ -9,7 +9,7 @@ import Notifications from "../screens/Notifications/Notifications";
 import Profile from "../screens/Profile/Profile";
 
 import EditProfile from "../screens/Profile/EditProfile";
-import Settings from "../screens/Profile/Settings";
+import Settings from "../screens/Profile/SettingNavigator";
 import UserProfile from "../screens/UserProfile/UserProfile";
 
 import SignUp from "../screens/Auth/SignUpNavigator";
