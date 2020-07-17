@@ -2,6 +2,7 @@ import React from "react";
 import styled from "styled-components/native";
 import { Dimensions } from "react-native";
 import { Button } from "react-native-paper";
+import * as ImagePicker from "expo-image-picker";
 
 import theme from "../../utils/theme";
 
@@ -21,7 +22,25 @@ const EditImageButton = styled(Button)`
   margin-left: 5px;
   background-color: ${theme.red};
 `;
-const EditImage = ({ uri }) => {
+const EditImage = ({ uri, setUri, _setImageChanged, setChange }) => {
+  const _pickImage = async () => {
+    try {
+      let result = await ImagePicker.launchImageLibraryAsync({
+        mediaTypes: ImagePicker.MediaTypeOptions.Images,
+        aspect: [1, 1],
+        allowsEditing: true,
+        quality: 0.5,
+      });
+      if (!result.cancelled) {
+        await setUri(result.uri);
+        await _setImageChanged(true);
+        setChange();
+      }
+    } catch (E) {
+      console.log(E);
+    }
+  };
+
   return (
     <RowView>
       <Image
@@ -29,7 +48,11 @@ const EditImage = ({ uri }) => {
           uri: uri,
         }}
       />
-      <EditImageButton labelStyle={{ fontWeight: "bold" }} mode="contained">
+      <EditImageButton
+        onPress={() => _pickImage()}
+        labelStyle={{ fontWeight: "bold" }}
+        mode="contained"
+      >
         Change Profile Picture
       </EditImageButton>
     </RowView>

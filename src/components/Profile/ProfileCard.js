@@ -110,7 +110,7 @@ const ProfileCard = () => {
       </RowView2>
       {data.bio === "" ? null : (
         <DetailsView2>
-          <BioText>16 year old boy from california. Enjoying Life</BioText>
+          <BioText>{data.bio}</BioText>
         </DetailsView2>
       )}
     </>
