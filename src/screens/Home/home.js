@@ -14,6 +14,7 @@ import theme from "../../utils/theme";
 import BottomNavigationBar from "../../components/BottomNavigationBar";
 import AuthAction from "../../redux/Auth/AuthAction";
 import ProfileAction from "../../redux/ProfileDetails/ProfileAction";
+import FetchHomeFeed from "../../api/FetchHomeFeed";
 
 const Container = styled.View`
   background-color: ${theme.black};
@@ -29,7 +30,7 @@ const Heading = styled(Title)`
 
 const Home = ({ navigation }) => {
   const Dispatch = useDispatch();
-
+  const [Data, _setData] = React.useState([]);
   const fetchData = async () => {
     const uid = await SecureStore.getItemAsync("user");
     firebase
@@ -54,10 +55,21 @@ const Home = ({ navigation }) => {
       navigation.addListener("focus", () => setStatusBarHidden(false, "fade"));
     }
   });
+
+  React.useEffect(() => {
+    async function hello() {
+      if (Data.length === 0) {
+        const result = await FetchHomeFeed();
+        _setData(result);
+      }
+    }
+    hello();
+  }, [Data]);
+
   return (
     <Container>
       <StatusBar style="light" />
-      <SwipingView />
+      <SwipingView Data={Data} navigation={navigation} />
       <BottomNavigationBar homeScreen />
     </Container>
   );

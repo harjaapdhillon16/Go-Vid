@@ -52,6 +52,9 @@ const VideoIconsAndText = ({
   likedState,
   username,
   caption,
+  uri,
+  likes,
+  comments,
 }) => {
   const [favorite, _setFavoriteState] = React.useState(false);
   const [snackBar, _setSnackBar] = React.useState(false);
@@ -62,8 +65,7 @@ const VideoIconsAndText = ({
         <NavigationToProfile onPress={() => Navigation.navigate("userProfile")}>
           <ProfileImage
             source={{
-              uri:
-                "https://images.unsplash.com/photo-1588288850150-d4ad788fdcf4?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=500&q=80",
+              uri: uri,
             }}
           />
         </NavigationToProfile>

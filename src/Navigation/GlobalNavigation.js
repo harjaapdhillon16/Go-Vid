@@ -11,7 +11,7 @@ export default function Navigation() {
     <Stack.Navigator
     swipeEnabled={false}
     backBehavior="none"
-      initialRouteName="welcome"
+      initialRouteName="App"
       tabBarOptions={{ style: { height: 0 } }}
     >
       <Stack.Screen name="welcome" component={Welcome} />

@@ -21,8 +21,8 @@ const Heading = styled(Text)`
   font-weight: bold;
   align-self: center;
   font-size: 18px;
-  width:70%;
-  text-align:center;
+  width: 70%;
+  text-align: center;
   padding-top: 20px;
 `;
 
@@ -94,8 +94,6 @@ const GalleryLoad = ({}) => {
           cameraType: [true],
         });
       }
-
-      console.log(result);
     } catch (E) {
       console.log(E);
     }

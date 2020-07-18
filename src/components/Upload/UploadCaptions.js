@@ -8,10 +8,13 @@ const Container = styled.View``;
 
 const Heading = styled(Text)`
   color: ${theme.white};
-  font-size: 30px;
-  font-weight: bold;
+  font-size: 20px;
   padding: 10px;
-  align-self:center;
+  background-color: ${theme.red};
+  align-self: flex-end;
+  margin-top:10px;
+  font-weight:bold;
+  margin-right:10px;
 `;
 const Captions = styled(Text)`
   color: ${theme.white};
@@ -30,10 +33,10 @@ const Input = styled(TextInput)`
   padding-left: 10px;
 `;
 
-const UploadCaptions = ({ _setKeyboardOn,caption,setCaption }) => {
+const UploadCaptions = ({ _setKeyboardOn, caption, setCaption,upload }) => {
   return (
     <Container>
-      <Heading>Upload</Heading>
+      <Heading onPress={()=>upload()}>UPLOAD</Heading>
       <Captions>Captions</Captions>
       <Input
         onFocus={() => {
@@ -44,7 +47,7 @@ const UploadCaptions = ({ _setKeyboardOn,caption,setCaption }) => {
         multiline={true}
         numberOfLines={3}
         value={caption}
-        onChangeText={(e)=>setCaption(e)}
+        onChangeText={(e) => setCaption(e)}
       />
     </Container>
   );

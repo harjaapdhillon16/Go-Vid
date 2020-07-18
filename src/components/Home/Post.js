@@ -8,7 +8,7 @@ import Comments from "../SharedComponents/Comments";
 
 const { height } = Dimensions.get("screen");
 
-const Height = height -50;
+const Height = height ;
 
 export default function Example(props) {
   const renderInner = () => (
@@ -28,7 +28,7 @@ export default function Example(props) {
     <View style={styles.container}>
       <BottomSheet
         ref={bs}
-        snapPoints={[Height , 0]}
+        snapPoints={[Height, 0]}
         renderContent={renderInner}
         initialSnap={1}
         renderHeader={renderHeader}
@@ -37,7 +37,12 @@ export default function Example(props) {
       />
 
       <VideoWithLikes
+        uri={props.uri}
+        url={props.url}
+        likes={props.likes}
+        comments={props.comments}
         index={props.index}
+        IndexState={props.indexState}
         caption={props.caption}
         username={props.username}
         link={props.link}
@@ -67,7 +72,7 @@ const styles = StyleSheet.create({
     right: 0,
   },
   panel: {
-    height: height -10,
+    height: height - 10,
     padding: 20,
     backgroundColor: "#000",
     paddingTop: 20,

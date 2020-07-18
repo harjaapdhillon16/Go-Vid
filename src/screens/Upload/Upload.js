@@ -1,12 +1,14 @@
 import React from "react";
 import styled from "styled-components/native";
 import MaterialIcons from "react-native-vector-icons/MaterialIcons";
-import { Keyboard } from "react-native";
+import { Keyboard, Text, Platform } from "react-native";
 import { Button } from "react-native-paper";
+import * as SecureStore from "expo-secure-store";
 
 import theme from "../../utils/theme";
 import UploadVideo from "../../components/Upload/UploadVideo";
 import UploadCaptions from "../../components/Upload/UploadCaptions";
+import AxiosInstance from "../../api/instance";
 
 const Container = styled.View`
   flex: 1;
@@ -22,13 +24,6 @@ const IconBack = styled.View`
   top: 10px;
   z-index: 2;
   elevation: 2;
-`;
-
-const PostButton = styled(Button)`
-  position: absolute;
-  right: 5px;
-  top: 10px;
-  border: 1px solid ${theme.purpleColor};
 `;
 
 const ScrollView = styled.ScrollView``;
@@ -47,8 +42,27 @@ const Upload = ({ route, navigation }) => {
     }
   }, [route.params]);
 
-  const submit = () => {
-    console.log("aya");
+  const submit = async () => {
+    Keyboard.dismiss();
+    const formData = new FormData();
+    const uid = await SecureStore.getItemAsync("user");
+    formData.append("file", {
+      name: uid,
+      type: "multipart/form-data", // <-- this part here
+      uri:
+        Platform.OS === "android"
+          ? videoRoutes[0]
+          : videoRoutes[0].replace("file:/", ""),
+    });
+    console.log(videoRoutes[0]);
+    formData.append(caption, caption);
+    const config = {
+      onUploadProgress: (progressEvent) => true,
+    };
+
+    AxiosInstance.post("/videoUpload", formData, config).then(() => {
+      navigation.navigate('homeApp')
+    });
   };
 
   return (
@@ -60,7 +74,7 @@ const Upload = ({ route, navigation }) => {
         }
       }}
     >
-      <ScrollView>
+      <ScrollView keyboardShouldPersistTaps="always">
         <IconBack
           onTouchEndCapture={() => {
             navigation.goBack();
@@ -69,11 +83,9 @@ const Upload = ({ route, navigation }) => {
         >
           <Icon size={30} color={theme.white} name="add-circle" />
         </IconBack>
-        <PostButton onPress={() => submit()} mode="contained">
-          {post}
-        </PostButton>
 
         <UploadCaptions
+          upload={() => submit()}
           Caption={caption}
           setCaption={(e) => _setCaption(e)}
           _setKeyboardOn={(item) => _setKeyboardOn(item)}
