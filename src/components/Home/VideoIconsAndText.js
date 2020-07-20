@@ -40,8 +40,14 @@ const IconView = styled.View`
   right: 5px;
 `;
 const Icons = styled(MaterialIcons)`
-  margin-bottom: 10px;
+  margin-bottom: 3px;
   opacity: 1;
+`;
+const Numbers = styled(Text)`
+  color: ${theme.white};
+  font-size: 15px;
+  align-self: center;
+  margin-bottom: 5px;
 `;
 
 const NavigationToProfile = styled.TouchableWithoutFeedback``;
@@ -55,6 +61,7 @@ const VideoIconsAndText = ({
   uri,
   likes,
   comments,
+  uid,
 }) => {
   const [favorite, _setFavoriteState] = React.useState(false);
   const [snackBar, _setSnackBar] = React.useState(false);
@@ -62,12 +69,17 @@ const VideoIconsAndText = ({
   return (
     <>
       <IconView>
-        <NavigationToProfile onPress={() => Navigation.navigate("userProfile")}>
-          <ProfileImage
-            source={{
+        <NavigationToProfile
+          onPress={() =>
+            Navigation.navigate("userProfile", {
+              uid: uid,
+              username: username,
               uri: uri,
-            }}
-          />
+              routed:true
+            })
+          }
+        >
+          <ProfileImage source={{ uri: uri }} />
         </NavigationToProfile>
         <Icons
           onPress={() => _setLikedState(!likedState)}
@@ -75,12 +87,8 @@ const VideoIconsAndText = ({
           name={likedState ? "favorite" : "favorite-border"}
           color={"white"}
         />
-        <Icons
-          onPress={() => snapToTop()}
-          size={35}
-          name="comment"
-          color={"white"}
-        />
+        <Numbers>{likes}</Numbers>
+   
         <Icons
           onPress={() => {
             if (!favorite) {

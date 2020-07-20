@@ -24,6 +24,7 @@ const ProfileMedia = () => {
       <Stack.Screen
         name="ownPost"
         component={OwnPosts}
+        came="sad"
         options={{
           tabBarIcon: () => <MaterialIcons color={theme.white} name="perm-media" size={20} />,
         }}

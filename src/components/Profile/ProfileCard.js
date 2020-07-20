@@ -77,35 +77,43 @@ const BioText = styled(DetailsText2)`
   text-align: center;
 `;
 
-const ProfileCard = () => {
-  const data = useSelector((state) => state.profile);
+const ProfileCard = ({ data }) => {
+   
   return (
     <>
       <Container>
         <RowView>
           <Image
             source={{
-              uri: data.uri,
+              uri: data.uri
+                ? data.uri
+                : "https://progresssoft.imgix.net/default-user.jpg?auto=compress&fit=crop",
             }}
           />
           <View>
-            <Name>{data.name}</Name>
-            <Username>@{data.username}</Username>
+            <Name>{data.name ? data.name : ""}</Name>
+            <Username>@{data.username ? data.username : ""}</Username>
           </View>
         </RowView>
       </Container>
       <RowView2>
         <DetailsView>
           <DetailsText>Followers</DetailsText>
-          <DetailsText2>{data.followers}</DetailsText2>
+          <DetailsText2>
+            {data.followers !== undefined || "" ? data.followers : ""}
+          </DetailsText2>
         </DetailsView>
         <DetailsView>
           <DetailsText>Following</DetailsText>
-          <DetailsText2>{data.following}</DetailsText2>
+          <DetailsText2>
+            {data.following !== undefined || "" ? data.following : ""}
+          </DetailsText2>
         </DetailsView>
         <DetailsView>
           <DetailsText>Likes</DetailsText>
-          <DetailsText2>{data.following}</DetailsText2>
+          <DetailsText2>
+            {data.likes !== undefined || "" ? data.likes : ""}
+          </DetailsText2>
         </DetailsView>
       </RowView2>
       {data.bio === "" ? null : (

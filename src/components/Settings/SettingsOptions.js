@@ -3,6 +3,10 @@ import styled from "styled-components/native";
 import theme from "../../utils/theme";
 import { Text } from "react-native-paper";
 import { useNavigation } from "@react-navigation/native";
+import firebase from "./../../../config";
+import * as SecureStore from "expo-secure-store";
+import { useDispatch } from "react-redux";
+import { Alert } from "react-native";
 
 const Container = styled.View`
   flex: 1;
@@ -33,18 +37,48 @@ const CheckView = styled.View`
 `;
 
 const SettingsOptions = () => {
+  const Dispatch = useDispatch();
   const Navigation = useNavigation();
+  const Logout = () => {
+    firebase
+      .auth()
+      .signOut()
+      .then(async () => {
+        await SecureStore.deleteItemAsync("user");
+        await SecureStore.deleteItemAsync("login");
+        await SecureStore.deleteItemAsync("name");
+        await SecureStore.deleteItemAsync("email");
+        Dispatch({type:"USER_LOGOUT"});
+        Navigation.navigate("homeApp");
+      })
+      .catch((E) => {
+        return Alert.alert(
+          "Go-Vid",
+          `Error ${E}`,
+          [
+            {
+              text: "OK",
+              style: "cancel",
+              onPress: () => {
+                Navigation.navigate("homeApp");
+              },
+            },
+          ],
+          { cancelable: false }
+        );
+      });
+  };
 
   return (
     <Container>
       <ScrollView>
-        <TouchableWithoutFeedback
+        {/* <TouchableWithoutFeedback
           onPress={() => Navigation.navigate("SettingsAccountOptions")}
         >
           <Options>
             <OptionsText>Account Options</OptionsText>
           </Options>
-        </TouchableWithoutFeedback>
+        </TouchableWithoutFeedback> */}
         <TouchableWithoutFeedback
           onPress={() => Navigation.navigate("SettingsNotifications")}
         >
@@ -52,7 +86,7 @@ const SettingsOptions = () => {
             <OptionsText>Notifications</OptionsText>
           </Options>
         </TouchableWithoutFeedback>
-        <TouchableWithoutFeedback>
+        <TouchableWithoutFeedback onPress={() => Logout()}>
           <Options style={{ backgroundColor: theme.red, height: 60 }}>
             <OptionsText style={{ color: theme.white }}>Logout</OptionsText>
           </Options>

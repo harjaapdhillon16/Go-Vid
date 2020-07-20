@@ -66,7 +66,7 @@ const Follow = ({ following, _setFollowing }) => (
 
 const UserProfileActions = () => {
   const Navigation = useNavigation();
-  const [following, _setFollowing] = React.useState(true);
+  const [following, _setFollowing] = React.useState(false);
   return (
     <Container>
       <Follow following={following} _setFollowing={_setFollowing} />

@@ -22,7 +22,7 @@ const VideoFull = styled(Video)`
 
 const Data = [Video1, Video2, Video3];
 
-export default function OwnPosts() {
+export default function OwnPosts(props) {
   return (
     <Container>
       <VideoFull

@@ -20,16 +20,8 @@ const SwipingView = ({ Data, navigation }) => {
   const [currentSlide, _setCurrentSlide] = React.useState(null);
   const indexState = useSelector((state) => state.home.no);
   const Dispatch = useDispatch();
-  React.useEffect(() => {
-    navigation.addListener("focus", () => {
-      if (initialLoad === false) {
-        _setInitialLoad(true);
-        ChangeIndex(0);
-      }
-    });
-  });
+
   function ChangeIndex(index) {
-    console.log(index)
     Dispatch(HomeAction(index));
     // _setCurrentSlide(index);
   }
@@ -47,17 +39,7 @@ const SwipingView = ({ Data, navigation }) => {
       {Data.map((item, index) => {
         return (
           <View key={index}>
-            <Post
-              key={index}
-              indexState={indexState}
-              index={index}
-              url={item.url}
-              uri={item.uri}
-              likes={item.likes}
-              comments={item.comments}
-              username={item.username}
-              caption={item.caption}
-            />
+            <Post data={item} index={index} indexState={indexState} />
           </View>
         );
       })}

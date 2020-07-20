@@ -1,6 +1,6 @@
 import React from "react";
 import styled from "styled-components/native";
-import { Text, Button } from "react-native-paper";
+import { Text, Button, ActivityIndicator } from "react-native-paper";
 import { Dimensions } from "react-native";
 import MaterialIcons from "react-native-vector-icons/MaterialIcons";
 import { useNavigation } from "@react-navigation/native";
@@ -49,6 +49,10 @@ const Done = styled(Button)`
 
 const ScrollView = styled.ScrollView``;
 
+const Loading = () => (
+  <ActivityIndicator color={theme.blue} size={30} style={{ paddingTop: 5 }} />
+);
+
 const EditProfile = (props) => {
   const data = useSelector((state) => state.profile);
   const Dispatch = useDispatch();
@@ -61,6 +65,7 @@ const EditProfile = (props) => {
   const [status, _setStatus] = React.useState(false);
   const [UsernameConstants, _setUsernameConstants] = React.useState("");
   const [ImageChanged, _setImageChanged] = React.useState(false);
+  const [button, _setButton] = React.useState("Done");
 
   async function update() {
     const uid = await SecureStore.getItemAsync("user");
@@ -82,6 +87,7 @@ const EditProfile = (props) => {
     }
   }, [data]);
   const ChangeValues = async () => {
+    _setButton(<Loading />);
     const uid = await SecureStore.getItemAsync("user");
     if (changes === true) {
       let user;
@@ -105,23 +111,36 @@ const EditProfile = (props) => {
           type: "image/jpg",
           uri: Uri,
         });
-        navigation.goBack();
 
         await axiosInstance.post("/profilePicture", formData).then(() => {
           update();
+          navigation.goBack();
         });
       } else {
         navigation.goBack();
         update();
       }
+    } else if (ImageChanged === true) {
+      if (ImageChanged === true) {
+        const formData = new FormData();
+        formData.append("image", {
+          name: uid,
+          type: "image/jpg",
+          uri: Uri,
+        });
+
+        await axiosInstance.post("/profilePicture", formData).then(() => {
+          update();
+          navigation.goBack();
+        });
+      }
     } else {
       navigation.goBack();
     }
   };
-
   return (
     <Container>
-      <ScrollView>
+      <ScrollView keyboardShouldPersistTaps="always">
         <Row>
           <Heading>Edit Profile</Heading>
         </Row>
@@ -129,7 +148,7 @@ const EditProfile = (props) => {
           onPress={() => ChangeValues()}
           labelStyle={{ color: theme.blue, fontWeight: "bold" }}
         >
-          Done
+          {button}
         </Done>
 
         <EditImage

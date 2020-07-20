@@ -8,9 +8,11 @@ import * as SecureStore from "expo-secure-store";
 import AxiosInstance from "../../api/instance";
 import { BackHandler } from "react-native";
 import { useDispatch } from "react-redux";
+import firebase from "../../../config";
 
 import theme from "../../utils/theme";
 import AuthAction from "../../redux/Auth/AuthAction";
+import ProfileDetails from "../../redux/ProfileDetails/ProfileReducers";
 
 const Container = styled.View`
   flex: 1;
@@ -58,7 +60,15 @@ const LoadingIndicator = styled(ActivityIndicator)`
 const ProfilePicture = () => {
   const Navigation = useNavigation();
   const Dispatch = useDispatch();
-
+  const fetchData = async () => {
+    const uid = await SecureStore.getItemAsync("user");
+    firebase
+      .database()
+      .ref(`/users/${uid}`)
+      .once("value", (snap) => {
+        Dispatch(ProfileAction(snap.val()));
+      });
+  };
   const [imageUri, _setImageUri] = React.useState(
     "https://progresssoft.imgix.net/default-user.jpg?auto=compress&fit=crop"
   );
@@ -82,6 +92,7 @@ const ProfilePicture = () => {
       SecureStore.setItemAsync("login", "true");
       SecureStore.setItemAsync("notifications", "false");
       Dispatch(AuthAction(true));
+      fetchData();
       Navigation.navigate("homeApp", { screen: "profile" });
     });
   };
@@ -102,6 +113,24 @@ const ProfilePicture = () => {
     } catch (E) {
       console.log(E);
     }
+  };
+  const skip = async () => {
+    _setLoading(true);
+    const uid = await SecureStore.getItemAsync("user");
+
+    firebase
+      .database()
+      .ref(`users/${uid}/uri`)
+      .set(
+        "https://progresssoft.imgix.net/default-user.jpg?auto=compress&fit=crop"
+      )
+      .then(() => {
+        SecureStore.setItemAsync("login", "true");
+        SecureStore.setItemAsync("notifications", "false");
+        Dispatch(AuthAction(true));
+        fetchData();
+        Navigation.navigate("homeApp", { screen: "profile" });
+      });
   };
   if (loading) {
     return (
@@ -131,6 +160,7 @@ const ProfilePicture = () => {
           Upload
         </UploadButton>
         <Skip
+          onPress={() => skip()}
           uppercase={false}
           labelStyle={{ color: theme.white, fontWeight: "bold" }}
         >

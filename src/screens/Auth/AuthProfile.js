@@ -61,7 +61,10 @@ const AuthProfile = () => {
       >
         Signup
       </Signup>
-      <Login labelStyle={{ color: theme.white, fontWeight: "bold" }}>
+      <Login
+        onPress={() => Navigation.navigate("login")}
+        labelStyle={{ color: theme.white, fontWeight: "bold" }}
+      >
         Login
       </Login>
       <BottomNavigationBar />

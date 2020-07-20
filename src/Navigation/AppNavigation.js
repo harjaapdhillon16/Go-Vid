@@ -13,6 +13,7 @@ import Settings from "../screens/Profile/SettingNavigator";
 import UserProfile from "../screens/UserProfile/UserProfile";
 
 import SignUp from "../screens/Auth/SignUpNavigator";
+import Login from "../screens/Auth/Login";
 
 const Stack = createBottomTabNavigator();
 const Stack2 = createStackNavigator();
@@ -50,6 +51,11 @@ const AppNavigation2 = () => {
         options={{ gestureEnabled: false }}
         name="signup"
         component={SignUp}
+      />
+      <Stack.Screen
+        options={{ gestureEnabled: false }}
+        name="login"
+        component={Login}
       />
     </Stack2.Navigator>
   );

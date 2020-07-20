@@ -2,13 +2,14 @@ import React from "react";
 import { Dimensions, StyleSheet, Text, View } from "react-native";
 import BottomSheet from "reanimated-bottom-sheet";
 import Animated from "react-native-reanimated";
+import { useNavigation } from "@react-navigation/native";
 
 import VideoWithLikes from "./VideoWithLikes";
 import Comments from "../SharedComponents/Comments";
 
 const { height } = Dimensions.get("screen");
 
-const Height = height ;
+const Height = height;
 
 export default function Example(props) {
   const renderInner = () => (
@@ -20,7 +21,7 @@ export default function Example(props) {
   );
 
   const renderHeader = () => <View style={styles.panelContainer}></View>;
-
+  const navigation = useNavigation();
   const fall = new Animated.Value(0);
   const bs = React.createRef();
 
@@ -37,17 +38,11 @@ export default function Example(props) {
       />
 
       <VideoWithLikes
-        uri={props.uri}
-        url={props.url}
-        likes={props.likes}
-        comments={props.comments}
-        index={props.index}
-        IndexState={props.indexState}
-        caption={props.caption}
-        username={props.username}
-        link={props.link}
-        navigation={props.navigation}
+        data={props.data}
         snapToTop={() => bs.current.snapTo(0)}
+        index={props.index}
+        navigation={navigation}
+        indexState={props.indexState}
       />
     </View>
   );

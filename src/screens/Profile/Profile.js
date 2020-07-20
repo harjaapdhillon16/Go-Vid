@@ -28,28 +28,38 @@ const View40 = styled.View`
 const Profile = ({ navigation }) => {
   const [data, _setData] = React.useState({});
 
-  const AuthState = useSelector((state) => state.auth.AuthValue);
-
+  const Auth = useSelector((state) => state.auth.AuthValue);
+  const [authState, _setAuthState] = React.useState(Auth);
   React.useEffect(() => {
     navigation.addListener("focus", () => {
       setStatusBarHidden(false, "none");
     });
   });
+  React.useEffect(() => {
+    console.log(Auth);
+    _setAuthState(Auth);
+  }, [Auth]);
 
-  if (AuthState === false) {
-    return <AuthProfile />;
-  }
+ 
+  const UserData = useSelector((state) => state.profile);
+
   return (
-    <Container>
-      <StatusBar style="light" />
-      <ScrollView>
-        <ProfileCard />
-        <ProfileActions />
-        <ProfileMedia />
-        <View40 />
-      </ScrollView>
-      <BottomNavigationBar />
-    </Container>
+    <>
+      {authState ? (
+        <Container>
+          <StatusBar style="light" />
+          <ScrollView>
+            <ProfileCard data={UserData} />
+            <ProfileActions />
+            <ProfileMedia />
+            <View40 />
+          </ScrollView>
+          <BottomNavigationBar />
+        </Container>
+      ) : (
+        <AuthProfile />
+      )}
+    </>
   );
 };
 export default Profile;

@@ -1,6 +1,6 @@
 import { CHANGE_INDEX } from "./HomeActionTypes";
 const InitialIndexState = {
-  no: undefined,
+  no: 0,
 };
 
 const ChangeIndexAndState = (state = InitialIndexState, action) => {

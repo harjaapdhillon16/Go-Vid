@@ -34,7 +34,6 @@ const EditImage = ({ uri, setUri, _setImageChanged, setChange }) => {
       if (!result.cancelled) {
         await setUri(result.uri);
         await _setImageChanged(true);
-        setChange();
       }
     } catch (E) {
       console.log(E);
