@@ -2,7 +2,8 @@ import React from "react";
 import styled from "styled-components/native";
 import { Dimensions, View } from "react-native";
 import { Text } from "react-native-paper";
-import { useSelector } from "react-redux";
+import { useNavigation } from "@react-navigation/native";
+import * as SecureStore from "expo-secure-store";
 
 import firebase from "../../../config";
 
@@ -76,9 +77,11 @@ const BioText = styled(DetailsText2)`
   font-size: 15px;
   text-align: center;
 `;
+const Touch = styled.TouchableWithoutFeedback``;
 
-const ProfileCard = ({ data }) => {
-   
+const ProfileCard = ({ data, uid }) => {
+  const Navigation = useNavigation();
+
   return (
     <>
       <Container>
@@ -97,24 +100,40 @@ const ProfileCard = ({ data }) => {
         </RowView>
       </Container>
       <RowView2>
-        <DetailsView>
-          <DetailsText>Followers</DetailsText>
-          <DetailsText2>
-            {data.followers !== undefined || "" ? data.followers : ""}
-          </DetailsText2>
-        </DetailsView>
-        <DetailsView>
-          <DetailsText>Following</DetailsText>
-          <DetailsText2>
-            {data.following !== undefined || "" ? data.following : ""}
-          </DetailsText2>
-        </DetailsView>
-        <DetailsView>
-          <DetailsText>Likes</DetailsText>
-          <DetailsText2>
-            {data.likes !== undefined || "" ? data.likes : ""}
-          </DetailsText2>
-        </DetailsView>
+        <Touch
+          onPress={async () => {
+            await SecureStore.setItemAsync("routeID", uid);
+            Navigation.navigate("followers");
+          }}
+        >
+          <DetailsView>
+            <DetailsText>Followers</DetailsText>
+            <DetailsText2>
+              {data.followers !== undefined || "" ? data.followers : ""}
+            </DetailsText2>
+          </DetailsView>
+        </Touch>
+        <Touch
+          onPress={async () => {
+            await SecureStore.setItemAsync("routeID", uid);
+            Navigation.navigate("following");
+          }}
+        >
+          <DetailsView>
+            <DetailsText>Following</DetailsText>
+            <DetailsText2>
+              {data.following !== undefined || "" ? data.following : ""}
+            </DetailsText2>
+          </DetailsView>
+        </Touch>
+        <Touch>
+          <DetailsView>
+            <DetailsText>Likes</DetailsText>
+            <DetailsText2>
+              {data.likes !== undefined || "" ? data.likes : ""}
+            </DetailsText2>
+          </DetailsView>
+        </Touch>
       </RowView2>
       {data.bio === "" ? null : (
         <DetailsView2>

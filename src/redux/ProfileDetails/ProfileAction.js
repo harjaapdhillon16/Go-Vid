@@ -10,6 +10,7 @@ const ProfileAction = (details) => {
     following: details.following,
     likes: details.likes,
     uri: details.uri,
+    uid: details.uid,
   };
 };
 export default ProfileAction;

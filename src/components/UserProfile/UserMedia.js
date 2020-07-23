@@ -43,15 +43,30 @@ const Loading = () => (
 
 const UserMedia = ({ uid }) => {
   React.useEffect(() => {
-    firebase
-      .database()
-      .ref(`posts/${uid}`)
-      .limitToLast(10)
-      .once("value", (snap) => {
-        _setVideoData([...snap.val()]);
-      });
+    if (Fetched === false) {
+      async function fetch() {
+        await firebase
+          .database()
+          .ref(`posts/${uid}`)
+          .orderByChild(`index`)
+          .startAt(0)
+          .endAt(1)
+          .once("value", (snap) => {
+            const postData = [];
+            snap.forEach((data, index) => {
+              const UniqueKey = data.ref.key;
+              const post = snap.val();
+              postData.push(post[data.ref.key]);
+            });
+            _setVideoData(postData);
+          });
+      }
+      _setFetched(true);
+      fetch();
+    }
   });
   const [videoData, _setVideoData] = React.useState([]);
+  const [Fetched, _setFetched] = React.useState(false);
   return (
     <>
       <ContainerTop>

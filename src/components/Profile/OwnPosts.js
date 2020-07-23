@@ -2,7 +2,7 @@ import React from "react";
 import styled from "styled-components/native";
 import { Text, ActivityIndicator } from "react-native-paper";
 import { Video } from "expo-av";
-import { Dimensions } from "react-native";
+import { Dimensions, View } from "react-native";
 import MaterialIcons from "react-native-vector-icons/MaterialIcons";
 import * as SecureStore from "expo-secure-store";
 
@@ -19,6 +19,7 @@ const Container = styled.View`
   flex-direction: row;
   flex-wrap: wrap;
   width: 100%;
+  height: 100%;
   background-color: ${theme.black};
 `;
 
@@ -34,9 +35,9 @@ const Image = styled.Image`
 `;
 const BorderView = styled.View`
   border: 2px solid ${theme.primaryColor};
-  border-top-width:0px;
+  border-top-width: 0px;
   border-left-width: 1px;
-  border-bottom-width:0px;
+  border-bottom-width: 0px;
   border-right-width: 1px;
 `;
 
@@ -49,31 +50,55 @@ const Loading = () => (
     style={{ alignSelf: "center", paddingLeft: "45%", paddingTop: 20 }}
   />
 );
+const Heading = styled(Text)`
+  color: ${theme.white};
+  align-self: center;
+  text-align:center;
+  padding:20px;
+`;
 
 const UserMedia = () => {
   React.useEffect(() => {
-    async function fetch() {
-      const uid = await SecureStore.getItemAsync("user");
-      await firebase
-        .database()
-        .ref(`posts/${uid}`)
-        .limitToLast(10)
-        .once("value", (snap) => {
-          _setVideoData([...snap.val()]);
-        });
+    if (Fetched === false) {
+      async function fetch() {
+        const uid = await SecureStore.getItemAsync("user");
+        await firebase
+          .database()
+          .ref(`posts/${uid}`)
+          .orderByChild(`index`)
+          .startAt(0)
+          .endAt(1)
+          .once("value", (snap) => {
+            const postData = [];
+            snap.forEach((data, index) => {
+              const UniqueKey = data.ref.key;
+              const post = snap.val();
+              postData.push(post[data.ref.key]);
+            });
+            _setVideoData(postData);
+          });
+      }
+      _setFetched(true);
+      fetch();
     }
-    fetch();
   });
   const [videoData, _setVideoData] = React.useState([]);
+  const [Fetched, _setFetched] = React.useState(false);
   return (
     <>
       <Container>
         {videoData.length === 0 ? (
-          <Loading />
+          <>
+            {Fetched ? (
+              <Heading>User hasn't posted any videos yet</Heading>
+            ) : (
+              <Loading />
+            )}
+          </>
         ) : (
-          videoData.map((item) => (
-            <BorderView>
-              <Image source={{ uri: item.image }} />
+          videoData.map((item, index) => (
+            <BorderView key={index}>
+              <Image key={index} source={{ uri: item.image }} />
             </BorderView>
           ))
         )}

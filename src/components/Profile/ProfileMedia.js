@@ -18,7 +18,11 @@ const ProfileMedia = () => {
       tabBarOptions={{
         showLabel: false,
         showIcon: true,
-        style: { backgroundColor: theme.black,borderColor:theme.white,borderTopWidth:0.4 },
+        style: {
+          backgroundColor: theme.black,
+          borderColor: theme.white,
+          borderTopWidth: 0.4,
+        },
       }}
     >
       <Stack.Screen
@@ -26,21 +30,32 @@ const ProfileMedia = () => {
         component={OwnPosts}
         came="sad"
         options={{
-          tabBarIcon: () => <MaterialIcons color={theme.white} name="perm-media" size={20} />,
+          tabBarIcon: () => (
+            <MaterialIcons color={theme.white} name="perm-media" size={20} />
+          ),
+        }}
+      />
+
+      <Stack.Screen
+        name="likedPosts"
+        component={LikedPosts}
+        options={{
+          tabBarIcon: () => (
+            <MaterialIcons
+              color={theme.white}
+              name="favorite-border"
+              size={20}
+            />
+          ),
         }}
       />
       <Stack.Screen
         name="favoritePosts"
         component={FavoritePosts}
         options={{
-          tabBarIcon: () => <Fontisto color={theme.white} name="favorite" size={20} />,
-        }}
-      />
-      <Stack.Screen
-        name="likedPosts"
-        component={LikedPosts}
-        options={{
-          tabBarIcon: () => <MaterialIcons color={theme.white} name="favorite-border" size={20} />,
+          tabBarIcon: () => (
+            <Fontisto color={theme.white} name="favorite" size={20} />
+          ),
         }}
       />
     </Stack.Navigator>

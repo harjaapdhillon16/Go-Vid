@@ -40,16 +40,14 @@ const Profile = ({ navigation }) => {
     _setAuthState(Auth);
   }, [Auth]);
 
- 
   const UserData = useSelector((state) => state.profile);
-
   return (
     <>
       {authState ? (
         <Container>
           <StatusBar style="light" />
           <ScrollView>
-            <ProfileCard data={UserData} />
+            <ProfileCard navigation={navigation} uid={UserData.uid} data={UserData} />
             <ProfileActions />
             <ProfileMedia />
             <View40 />

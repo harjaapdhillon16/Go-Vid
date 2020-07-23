@@ -1,9 +1,12 @@
 import React from "react";
 import styled from "styled-components/native";
-import { Button } from "react-native-paper";
+import { Button, ActivityIndicator } from "react-native-paper";
 import { useNavigation } from "@react-navigation/native";
+import * as SecureStore from "expo-secure-store";
+import axiosInstance from "../../api/instance";
 
 import theme from "../../utils/theme";
+import firebase from "../../../config";
 
 const Container = styled.View`
   padding-top: 10px;
@@ -42,19 +45,21 @@ const RowView = styled.View`
   align-self: center;
 `;
 
-const Follow = ({ following, _setFollowing }) => (
+const Loading = () => <ActivityIndicator color={theme.primaryColor} />;
+
+const Follow = ({ following, _setFollow, _setUnFollow }) => (
   <>
     {following ? (
       <FollowingButton
         labelStyle={{ fontWeight: "bold", color: theme.black }}
         mode="contained"
-        onPress={()=>_setFollowing(false)}
+        onPress={() => _setUnFollow()}
       >
         Following
       </FollowingButton>
     ) : (
       <FollowButton
-        onPress={()=>_setFollowing(true)}
+        onPress={() => _setFollow()}
         labelStyle={{ fontWeight: "bold" }}
         mode="contained"
       >
@@ -64,14 +69,74 @@ const Follow = ({ following, _setFollowing }) => (
   </>
 );
 
-const UserProfileActions = () => {
+const UserProfileActions = ({ userID }) => {
   const Navigation = useNavigation();
   const [following, _setFollowing] = React.useState(false);
+  const [fetched, _setFetched] = React.useState(false);
+  React.useEffect(() => {
+    if (fetched === false) {
+      async function fetch() {
+        const uid = await SecureStore.getItemAsync("user");
+        if (uid !== null) {
+          await firebase
+            .database()
+            .ref(`following/${uid}/${userID}`)
+            .once("value", (snap) => {
+              if (snap.val() === true) {
+                _setFollowing(true);
+                _setFetched(true);
+              } else {
+                _setFetched(true);
+              }
+            });
+        } else {
+          _setFetched(true);
+        }
+      }
+      fetch();
+    }
+  });
+
+  const FollowAction = async () => {
+    _setFollowing(true);
+    const uid = await SecureStore.getItemAsync("user");
+    if (uid !== null) {
+      axiosInstance.post("/follow", {
+        uid: uid,
+        userID: userID,
+      });
+    }
+  };
+  const UnFollowAction = async () => {
+    _setFollowing(false);
+    const uid = await SecureStore.getItemAsync("user");
+    if (uid !== null) {
+      axiosInstance.post("/unFollow", {
+        uid: uid,
+        userID: userID,
+      });
+    }
+  };
+
   return (
     <Container>
-      <Follow following={following} _setFollowing={_setFollowing} />
+      {fetched ? (
+        <Follow
+          following={following}
+          _setFollow={() => FollowAction()}
+          _setUnFollow={() => UnFollowAction()}
+        />
+      ) : (
+        <Loading />
+      )}
+
       <RowView>
-        <Back onPress={() => Navigation.goBack()} mode="contained">
+        <Back
+          onPress={() => {
+            Navigation.goBack();
+          }}
+          mode="contained"
+        >
           Back
         </Back>
         <Options labelStyle={{ fontWeight: "bold" }} mode="contained">

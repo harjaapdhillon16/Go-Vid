@@ -4,9 +4,12 @@ import MaterialIcons from "react-native-vector-icons/MaterialIcons";
 import { Text, Snackbar } from "react-native-paper";
 import { useNavigation } from "@react-navigation/native";
 import { Dimensions, Platform } from "react-native";
+import * as SecureStore from "expo-secure-store";
 
 import theme from "../../utils/theme";
 import { Video } from "expo-av";
+
+import firebase from "../../../config";
 
 const { width } = Dimensions.get("screen");
 
@@ -62,10 +65,77 @@ const VideoIconsAndText = ({
   likes,
   comments,
   uid,
+  likeAction,
+  unlikeAction,
+  postNo
 }) => {
   const [favorite, _setFavoriteState] = React.useState(false);
   const [snackBar, _setSnackBar] = React.useState(false);
   const Navigation = useNavigation();
+
+  const Favorite = async () => {
+    let index;
+    if (favorite === false) {
+      _setFavoriteState(true);
+
+      const userID = uid;
+      const currentUser = await SecureStore.getItemAsync("user");
+      if (currentUser !== null) {
+        await firebase
+          .database()
+          .ref(`favorite/${currentUser}/favorites`)
+          .once("value", (data) => {
+            index = data.val();
+            if (index === null) {
+              index = 0;
+            }
+            firebase
+              .database()
+              .ref(`favorite/${currentUser}/favorites`)
+              .set(index + 1);
+          });
+      }
+      currentUser !== null
+        ? firebase
+            .database()
+            .ref(`favorite/${currentUser}/${postNo}__${userID}`)
+            .set({
+              index: index + 1,
+            })
+        : null;
+    }
+  };
+  const UnFavorite = async () => {
+    let index;
+    if (favorite === true) {
+      _setFavoriteState(false);
+
+      const userID = uid;
+      const currentUser = await SecureStore.getItemAsync("user");
+      if (currentUser !== null) {
+        await firebase
+          .database()
+          .ref(`favorite/${currentUser}/favorites`)
+          .once("value", (data) => {
+            index = data.val();
+            if (index === null) {
+              index = 0;
+            }
+            firebase
+              .database()
+              .ref(`favorite/${currentUser}/favorites`)
+              .set(index - 1);
+          });
+      }
+      currentUser !== null
+        ? firebase
+            .database()
+            .ref(`favorite/${currentUser}/${postNo}__${userID}`)
+            .remove()
+        : null;
+    }
+  };
+
   return (
     <>
       <IconView>
@@ -75,26 +145,36 @@ const VideoIconsAndText = ({
               uid: uid,
               username: username,
               uri: uri,
-              routed:true
+              routed: true,
             })
           }
         >
           <ProfileImage source={{ uri: uri }} />
         </NavigationToProfile>
         <Icons
-          onPress={() => _setLikedState(!likedState)}
+          onPress={() => {
+            if (likedState === true) {
+              _setLikedState(false);
+              unlikeAction();
+            } else {
+              _setLikedState(true);
+              likeAction();
+            }
+          }}
           size={40}
           name={likedState ? "favorite" : "favorite-border"}
           color={"white"}
         />
         <Numbers>{likes}</Numbers>
-   
+
         <Icons
           onPress={() => {
             if (!favorite) {
+              Favorite();
               _setSnackBar(true);
+            } else {
+              UnFavorite();
             }
-            _setFavoriteState(!favorite);
           }}
           size={40}
           name={favorite ? "bookmark" : "bookmark-border"}
@@ -111,7 +191,7 @@ const VideoIconsAndText = ({
         action={{
           label: "Undo",
           onPress: () => {
-            _setFavoriteState(!favorite);
+            UnFavorite();
           },
         }}
         duration={1000}

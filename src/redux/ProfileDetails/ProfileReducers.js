@@ -8,6 +8,7 @@ const initialState = {
   following: "",
   likes: "",
   uri: "",
+  uid: "",
 };
 
 const ProfileReducer = (state = initialState, action) => {
@@ -22,6 +23,7 @@ const ProfileReducer = (state = initialState, action) => {
         following: action.following,
         likes: action.likes,
         uri: action.uri,
+        uid: action.uid,
       };
     default:
       return state;

@@ -11,7 +11,7 @@ import * as firebase from "firebase";
 const firebaseConfig = {
   apiKey: "AIzaSyBRUQipG8s_MuIND2kVEgmgodWqlG3uR7E",
   authDomain: "govid-faa37.firebaseapp.com",
-  databaseURL: "https://govid-faa37.firebaseio.com",
+  databaseURL: "https://govid-faa37.firebaseio.com/",
   projectId: "govid-faa37",
   storageBucket: "govid-faa37.appspot.com",
   messagingSenderId: "810540696712",

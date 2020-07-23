@@ -15,6 +15,9 @@ import UserProfile from "../screens/UserProfile/UserProfile";
 import SignUp from "../screens/Auth/SignUpNavigator";
 import Login from "../screens/Auth/Login";
 
+import Followers from "../screens/Follow/Followers";
+import Following from "../screens/Follow/Following";
+
 const Stack = createBottomTabNavigator();
 const Stack2 = createStackNavigator();
 
@@ -31,6 +34,9 @@ const AppNavigation = () => {
       <Stack.Screen name="search" component={Search} />
       <Stack.Screen name="notifications" component={Notifications} />
       <Stack.Screen name="profile" component={Profile} />
+      <Stack.Screen name="followers" component={Followers} />
+      <Stack.Screen name="following" component={Following} />
+      <Stack2.Screen name="userProfile" component={UserProfile} />
     </Stack.Navigator>
   );
 };
@@ -46,7 +52,6 @@ const AppNavigation2 = () => {
         component={UploadCombine}
       />
       <Stack2.Screen name="settings" component={Settings} />
-      <Stack2.Screen name="userProfile" component={UserProfile} />
       <Stack.Screen
         options={{ gestureEnabled: false }}
         name="signup"

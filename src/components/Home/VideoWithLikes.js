@@ -3,11 +3,13 @@ import styled from "styled-components/native";
 import { Video } from "expo-av";
 import MaterialIcons from "react-native-vector-icons/MaterialIcons";
 import { Dimensions, Platform } from "react-native";
+import * as SecureStore from "expo-secure-store";
 
 import DoubleClick from "../DoubleTap/DoubleTap";
 import theme from "../../utils/theme";
 import VideoIconsAndText from "./VideoIconsAndText";
 import Video1 from "../../assets/01.mp4";
+import firebase from "../../../config";
 
 const height = Dimensions.get("screen").height;
 
@@ -43,19 +45,24 @@ export default class VideoPost extends React.Component {
       playState: true,
       heartState: true,
       likedState: false,
-      playing: false,
+      playing: true,
       loaded: false,
       initialLoad: false,
+      likes: this.props.data.likes,
     };
-    this.counter = 0;
   }
 
   componentDidUpdate() {
     if (this.state.playState === true) {
       if (this.props.index !== this.props.indexState) {
         this.reference.pauseAsync();
+        if (this.state.playing === false) {
+          this.setState({ playing: true });
+        }
       } else {
-        this.reference.playFromPositionAsync(0);
+        if (this.state.playing === true) {
+          this.reference.playFromPositionAsync(0);
+        }
       }
     }
     const { navigation } = this.props;
@@ -78,23 +85,107 @@ export default class VideoPost extends React.Component {
     if (this.state.playState === true) {
       this.reference.pauseAsync();
       this.setState({ playState: false });
+      this.setState({ playing: false });
     } else {
       this.reference.playAsync();
       this.setState({ playState: true });
+      this.setState({ playing: false });
     }
   };
 
   Like = async () => {
+    this.setState({ playing: false });
+    this.likedApi();
     await this.setState({ heartState: false });
     this.setState({ likedState: true });
     setTimeout(async () => {
       await this.setState({ heartState: true });
     }, 400);
   };
+
   async componentDidMount() {
     await this.reference.setOnPlaybackStatusUpdate(
       this._onPlaybackStatusUpdate
     );
+  }
+
+  async likedApi() {
+    const { uid, postNo } = this.props.data;
+    const { likedState, likes } = this.state;
+    let index;
+    if (likedState === false) {
+      this.setState({ likes: likes + 1 });
+      const LikesDatabase = firebase.database().ref(`users/${uid}/likes`);
+      LikesDatabase.once("value", (snap) => {
+        LikesDatabase.set(snap.val() + 1);
+      });
+      const route = `posts/${uid}/${postNo}/likes`;
+      await firebase
+        .database()
+        .ref(route)
+        .once("value", async (snap) => {
+          firebase
+            .database()
+            .ref(route)
+            .set(snap.val() + 1);
+
+          const userID = this.props.data.uid;
+          const uid = await SecureStore.getItemAsync("user");
+
+          await firebase
+            .database()
+            .ref(`liked/${uid}/likes`)
+            .once("value", (data) => {
+              index = data.val();
+              if (index === null) {
+                index = 0;
+              }
+              firebase
+                .database()
+                .ref(`liked/${uid}/likes`)
+                .set(index + 1);
+            });
+
+          uid !== null
+            ? firebase
+                .database()
+                .ref(`liked/${uid}/${postNo}__${userID}`)
+                .set({
+                  index: index + 1,
+                })
+            : null;
+        });
+    }
+  }
+  async Unlike() {
+    const { uid, postNo } = this.props.data;
+    const { likedState, likes } = this.state;
+    if (likedState === true) {
+      this.setState({ likes: likes - 1 });
+      const LikesDatabase = firebase.database().ref(`users/${uid}/likes`);
+      LikesDatabase.once("value", (snap) => {
+        LikesDatabase.set(snap.val() - 1);
+      });
+      const route = `posts/${uid}/${postNo}/likes`;
+      await firebase
+        .database()
+        .ref(route)
+        .once("value", async (snap) => {
+          firebase
+            .database()
+            .ref(route)
+            .set(snap.val() - 1);
+          const uid = await SecureStore.getItemAsync("user");
+          const userID = this.props.data.uid;
+
+          uid !== null
+            ? firebase
+                .database()
+                .ref(`liked/${uid}/${postNo}__${userID}`)
+                .remove()
+            : null;
+        });
+    }
   }
 
   _onPlaybackStatusUpdate = async (playbackStatus) => {
@@ -137,12 +228,12 @@ export default class VideoPost extends React.Component {
       snapToTop,
       caption,
       uri,
-      likes,
       comments,
       url,
       uid,
+      postNo,
     } = this.props.data;
-    const { playState, heartState, likedState, playing } = this.state;
+    const { playState, heartState, likedState, playing, likes } = this.state;
     return (
       <Container>
         <DoubleClick
@@ -157,7 +248,6 @@ export default class VideoPost extends React.Component {
           <VideoView style={{ flex: 1 }}>
             <VideoStyled
               isLooping
-              shouldPlay={playing}
               resizeMode="cover"
               ref={(ref) => {
                 this.reference = ref;
@@ -184,9 +274,12 @@ export default class VideoPost extends React.Component {
           snapToTop={snapToTop}
           _setLikedState={(e) => this.setState({ likedState: e })}
           likedState={likedState}
+          likeAction={() => this.likedApi()}
+          unlikeAction={() => this.Unlike()}
           caption={caption}
           username={username}
           uri={uri}
+          postNo={postNo}
           likes={likes}
           comments={comments}
           likes={likes}
