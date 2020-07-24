@@ -15,11 +15,19 @@ const Container = styled(ViewPager)`
   height: ${height}px;
 `;
 
-const SwipingView = ({ Data, navigation }) => {
+const SwipingView = ({ Data, navigation, no }) => {
   const [initialLoad, _setInitialLoad] = React.useState(false);
   const [currentSlide, _setCurrentSlide] = React.useState(null);
   const indexState = useSelector((state) => state.home.no);
   const Dispatch = useDispatch();
+
+  // React.useEffect(() => {
+  //   navigation.addListener("focus", () => {
+  //     if (no !== undefined) {
+  //       Dispatch(HomeAction(index));
+  //     }
+  //   });
+  // });
 
   function ChangeIndex(index) {
     Dispatch(HomeAction(index));
@@ -31,7 +39,7 @@ const SwipingView = ({ Data, navigation }) => {
   return (
     <Container
       orientation="vertical"
-      initialPage={0}
+      initialPage={no === undefined ? 0 : no}
       onPageSelected={(e) => {
         ChangeIndex(e.nativeEvent.position);
       }}
@@ -39,7 +47,7 @@ const SwipingView = ({ Data, navigation }) => {
       {Data.map((item, index) => {
         return (
           <View key={index}>
-            <Post data={item} index={index} indexState={indexState} />
+            <Post data={item} no={no} index={index} indexState={indexState} />
           </View>
         );
       })}

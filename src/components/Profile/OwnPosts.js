@@ -5,6 +5,8 @@ import { Video } from "expo-av";
 import { Dimensions, View } from "react-native";
 import MaterialIcons from "react-native-vector-icons/MaterialIcons";
 import * as SecureStore from "expo-secure-store";
+import { useDispatch } from "react-redux";
+import { useNavigation } from "@react-navigation/native";
 
 import Video1 from "../../assets/video1main.mp4";
 import Video2 from "../../assets/video1.mp4";
@@ -12,6 +14,7 @@ import Video3 from "../../assets/video3.mp4";
 
 import theme from "../../utils/theme";
 import firebase from "../../../config";
+import VideoViewAction from "../../redux/VideoView/VideoViewAction";
 
 const { width, height } = Dimensions.get("window");
 
@@ -43,6 +46,8 @@ const BorderView = styled.View`
 
 const Data = [Video1, Video2, Video3];
 
+const Touch = styled.TouchableWithoutFeedback``;
+
 const Loading = () => (
   <ActivityIndicator
     color={theme.primaryColor}
@@ -53,8 +58,8 @@ const Loading = () => (
 const Heading = styled(Text)`
   color: ${theme.white};
   align-self: center;
-  text-align:center;
-  padding:20px;
+  text-align: center;
+  padding: 20px;
 `;
 
 const UserMedia = () => {
@@ -84,6 +89,14 @@ const UserMedia = () => {
   });
   const [videoData, _setVideoData] = React.useState([]);
   const [Fetched, _setFetched] = React.useState(false);
+  const Dispatch = useDispatch();
+  const navigation = useNavigation();
+  
+  const NavigateToVideoView = async (index) => {
+    Dispatch(VideoViewAction(videoData, index));
+    // console.log(videoData)
+    navigation.navigate("videoView");
+  };
   return (
     <>
       <Container>
@@ -97,9 +110,11 @@ const UserMedia = () => {
           </>
         ) : (
           videoData.map((item, index) => (
-            <BorderView key={index}>
-              <Image key={index} source={{ uri: item.image }} />
-            </BorderView>
+            <Touch onPress={() => NavigateToVideoView(index)}>
+              <BorderView key={index}>
+                <Image key={index} source={{ uri: item.image }} />
+              </BorderView>
+            </Touch>
           ))
         )}
       </Container>

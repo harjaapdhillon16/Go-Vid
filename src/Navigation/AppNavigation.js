@@ -18,6 +18,10 @@ import Login from "../screens/Auth/Login";
 import Followers from "../screens/Follow/Followers";
 import Following from "../screens/Follow/Following";
 
+import VideoView from "../screens/VideoView/VideoView";
+
+import Latest from "../screens/Latest/Latest";
+
 const Stack = createBottomTabNavigator();
 const Stack2 = createStackNavigator();
 
@@ -62,6 +66,8 @@ const AppNavigation2 = () => {
         name="login"
         component={Login}
       />
+      <Stack.Screen name="videoView" component={VideoView} />
+      <Stack.Screen name="latest" component={Latest} />
     </Stack2.Navigator>
   );
 };

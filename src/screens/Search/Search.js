@@ -1,9 +1,10 @@
 import React from "react";
 import styled from "styled-components/native";
-import { Title } from "react-native-paper";
+import { Title, Text } from "react-native-paper";
 import { Searchbar } from "react-native-paper";
 import { StatusBar, setStatusBarHidden } from "expo-status-bar";
 import Constants from "expo-constants";
+import { Keyboard } from "react-native";
 
 import SlidingFeed from "../../components/Search/SlidingFeed";
 import theme from "../../utils/theme";
@@ -25,13 +26,43 @@ const SearchInput = styled(Searchbar)`
   background-color: ${theme.lightBlack};
   color: ${theme.white};
 `;
+
+const SearchAlert = styled(Text)`
+  color: ${theme.white};
+  width: 90%;
+  text-align: center;
+  font-size: 18px;
+  align-self: center;
+  padding-top: 10px;
+  font-weight: bold;
+`;
+
+const SearchText = () => (
+  <SearchAlert>
+    Search is still development, still you can enjoy in the home and explore
+    feeds!
+  </SearchAlert>
+);
+
 const Search = ({ navigation }) => {
   React.useEffect(() => {
     navigation.addListener("focus", () => setStatusBarHidden(false, "none"));
   });
   let reference;
+  const [keyboardFocused, _setKeyboard] = React.useState(false);
+
+  const [searchFocused, _setSearchFocused] = React.useState(false);
+
   return (
-    <Container>
+    <Container
+      onTouchEndCapture={() => {
+        if (keyboardFocused) {
+          Keyboard.dismiss();
+          _setSearchFocused(false);
+          _setKeyboard(false);
+        }
+      }}
+    >
       <StatusBar style="light" />
       <SearchInput
         placeholder="Search"
@@ -43,9 +74,17 @@ const Search = ({ navigation }) => {
             text: theme.white,
           },
         }}
+        onFocus={() => {
+          _setSearchFocused(true);
+          _setKeyboard(true);
+        }}
+        onBlur={() => {
+          _setSearchFocused(false);
+          _setKeyboard(false);
+        }}
         onIconPress={() => reference.focus()}
       />
-      <SlidingFeed />
+      {searchFocused ? <SearchText /> : <SlidingFeed />}
       <BottomNavigationBar />
     </Container>
   );

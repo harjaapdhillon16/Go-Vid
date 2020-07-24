@@ -3,10 +3,13 @@ import styled from "styled-components/native";
 import { Text, ActivityIndicator } from "react-native-paper";
 import { Dimensions } from "react-native";
 import * as SecureStore from "expo-secure-store";
+import { useDispatch } from "react-redux";
+import { useNavigation } from "@react-navigation/native";
 
 import AxiosInstance from "../../api/instance";
 import theme from "../../utils/theme";
 import firebase from "../../../config";
+import VideoViewAction from "../../redux/VideoView/VideoViewAction";
 
 const { width, height } = Dimensions.get("window");
 
@@ -30,6 +33,8 @@ const BorderView = styled.View`
   border-right-width: 1px;
 `;
 
+const Touch = styled.TouchableWithoutFeedback``;
+
 const Loading = () => (
   <ActivityIndicator
     color={theme.primaryColor}
@@ -40,7 +45,7 @@ const Loading = () => (
 
 export default function LikedPosts() {
   React.useEffect(() => {
-    if (videoData.length === 0) {
+    if (fetched === false) {
       async function fetch() {
         const uid = await SecureStore.getItemAsync("user");
         let likes;
@@ -63,19 +68,33 @@ export default function LikedPosts() {
           });
       }
       fetch();
+      _setFetched(true);
     }
   });
   const [videoData, _setVideoData] = React.useState([]);
   const [loading, _setLoading] = React.useState(<Loading />);
+  const [fetched, _setFetched] = React.useState(false);
+  const Dispatch = useDispatch();
+  const navigation = useNavigation();
+
+  const NavigateToVideoView = async (index) => {
+    Dispatch(VideoViewAction(videoData, index));
+    // console.log(videoData)
+    navigation.navigate("videoView");
+  };
   return (
     <>
       <Container>
         {videoData.length === 0
-          ? loading
+          ? fetched === true
+            ? null
+            : loading
           : videoData.map((item, index) => (
-              <BorderView key={index}>
-                <Image key={index} source={{ uri: item.image }} />
-              </BorderView>
+              <Touch onPress={() => NavigateToVideoView(index)}>
+                <BorderView key={index}>
+                  <Image key={index} source={{ uri: item.image }} />
+                </BorderView>
+              </Touch>
             ))}
       </Container>
     </>

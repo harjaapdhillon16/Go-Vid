@@ -4,6 +4,8 @@ import { Text, ActivityIndicator } from "react-native-paper";
 import { Video } from "expo-av";
 import { Dimensions } from "react-native";
 import MaterialIcons from "react-native-vector-icons/MaterialIcons";
+import { useNavigation } from "@react-navigation/native";
+import { useDispatch } from "react-redux";
 
 import Video1 from "../../assets/video1main.mp4";
 import Video2 from "../../assets/video1.mp4";
@@ -12,12 +14,14 @@ import Video3 from "../../assets/video3.mp4";
 import theme from "../../utils/theme";
 import firebase from "../../../config";
 
+import VideoViewAction from "../../redux/VideoView/VideoViewAction";
+
 const { width, height } = Dimensions.get("window");
 
 const Container = styled.View`
   flex-direction: row;
   flex-wrap: wrap;
-  width:100%;
+  width: 100%;
 `;
 
 const ContainerTop = styled.View`
@@ -31,17 +35,21 @@ const Image = styled.Image`
   height: ${height / 3}px;
 `;
 
+const Touch = styled.TouchableWithoutFeedback``;
+
 const Data = [Video1, Video2, Video3];
 
 const Loading = () => (
   <ActivityIndicator
     color={theme.primaryColor}
     size={30}
-    style={{ alignSelf:'center',paddingLeft:"45%",paddingTop:20 }}
+    style={{ alignSelf: "center", paddingLeft: "45%", paddingTop: 20 }}
   />
 );
 
 const UserMedia = ({ uid }) => {
+  const navigation = useNavigation();
+
   React.useEffect(() => {
     if (Fetched === false) {
       async function fetch() {
@@ -58,7 +66,7 @@ const UserMedia = ({ uid }) => {
               const post = snap.val();
               postData.push(post[data.ref.key]);
             });
-            _setVideoData(postData);
+            _setVideoData([...postData]);
           });
       }
       _setFetched(true);
@@ -67,6 +75,14 @@ const UserMedia = ({ uid }) => {
   });
   const [videoData, _setVideoData] = React.useState([]);
   const [Fetched, _setFetched] = React.useState(false);
+  const Dispatch = useDispatch();
+
+  const NavigateToVideoView = async (index) => {
+    Dispatch(VideoViewAction(videoData, index));
+    // console.log(videoData)
+    navigation.navigate('videoView')
+  };
+
   return (
     <>
       <ContainerTop>
@@ -81,10 +97,10 @@ const UserMedia = ({ uid }) => {
         {videoData.length === 0 ? (
           <Loading />
         ) : (
-          videoData.map((item) => (
-            <Image
-              source={{ uri: item.image }}
-            />
+          videoData.map((item, index) => (
+            <Touch onPress={() => NavigateToVideoView(index)}>
+              <Image source={{ uri: item.image }} />
+            </Touch>
           ))
         )}
       </Container>

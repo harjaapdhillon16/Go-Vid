@@ -41,6 +41,7 @@ export default function Example(props) {
         data={props.data}
         snapToTop={() => bs.current.snapTo(0)}
         index={props.index}
+        no={props.no}
         navigation={navigation}
         indexState={props.indexState}
       />

@@ -1,34 +1,27 @@
 import React, { useRef, useState, useEffect } from "react";
 import Carousel, { ParallaxImage } from "react-native-snap-carousel";
-import { View, Dimensions, StyleSheet, Platform } from "react-native";
+import {
+  View,
+  Dimensions,
+  StyleSheet,
+  Platform,
+  TouchableWithoutFeedback,
+} from "react-native";
 import styled from "styled-components/native";
 import { Text } from "react-native-paper";
+import { useNavigation } from "@react-navigation/native";
 
 import theme from "../../utils/theme";
 
 const ENTRIES1 = [
   {
-    title: "Beautiful ",
+    title: "LATEST ",
     subtitle: "Lorem ipsum",
     illustration: "https://i.imgur.com/MABUbpDl.jpg",
+    screen:"latest"
   },
   {
-    title: "Earlier this morning, NYC",
-    subtitle: "Lorem ipsum dolor sit amet",
-    illustration: "https://i.imgur.com/UPrs1EWl.jpg",
-  },
-  {
-    title: "White Pocket Sunset",
-    subtitle: "Lorem ipsum dolor sit amet et nuncat ",
-    illustration: "https://i.imgur.com/MABUbpDl.jpg",
-  },
-  {
-    title: "Acrocorinth, Greece",
-    subtitle: "Lorem ipsum dolor sit amet et nuncat mergitur",
-    illustration: "https://i.imgur.com/KZsmUi2l.jpg",
-  },
-  {
-    title: "New Zealand",
+    title: "Popular Post(Coming soon)",
     subtitle: "Lorem ipsum dolor sit amet",
     illustration: "https://i.imgur.com/UPrs1EWl.jpg",
   },
@@ -58,22 +51,30 @@ const Explore = (props) => {
   useEffect(() => {
     setEntries(ENTRIES1);
   }, []);
-
+  const Navigation = useNavigation();
   const renderItem = ({ item, index }, parallaxProps) => {
     return (
-      <View style={styles.item}>
-        <ParallaxImage
-          source={{ uri: item.illustration }}
-          containerStyle={styles.imageContainer}
-          style={styles.image}
-          {...parallaxProps}
-        />
-        <ImageTextView>
-          <ImageText style={{}} numberOfLines={2}>
-            {item.title}
-          </ImageText>
-        </ImageTextView>
-      </View>
+      <TouchableWithoutFeedback
+        onPress={() => {
+          if (item.screen === "latest") {
+            Navigation.navigate("latest");
+          }
+        }}
+      >
+        <View style={styles.item}>
+          <ParallaxImage
+            source={{ uri: item.illustration }}
+            containerStyle={styles.imageContainer}
+            style={styles.image}
+            {...parallaxProps}
+          />
+          <ImageTextView>
+            <ImageText style={{}} numberOfLines={2}>
+              {item.title}
+            </ImageText>
+          </ImageTextView>
+        </View>
+      </TouchableWithoutFeedback>
     );
   };
 

@@ -53,19 +53,23 @@ export default class VideoPost extends React.Component {
   }
 
   componentDidUpdate() {
-    if (this.state.playState === true) {
-      if (this.props.index !== this.props.indexState) {
-        this.reference.pauseAsync();
-        if (this.state.playing === false) {
-          this.setState({ playing: true });
-        }
-      } else {
-        if (this.state.playing === true) {
-          this.reference.playFromPositionAsync(0);
+    const { navigation } = this.props;
+
+    if (navigation.isFocused() === true) {
+      if (this.state.playState === true) {
+        if (this.props.index !== this.props.indexState) {
+          this.reference.pauseAsync();
+          if (this.state.playing === false) {
+            this.setState({ playing: true });
+          }
+        } else {
+          if (this.state.playing === true) {
+            this.reference.playFromPositionAsync(0);
+          }
         }
       }
     }
-    const { navigation } = this.props;
+
     navigation.addListener("focus", () => {
       if (this.state.initialLoad === true) {
         if (
@@ -199,11 +203,20 @@ export default class VideoPost extends React.Component {
       }
     } else {
       // Update your UI for the loaded state
-      if (this.state.initialLoad === false) {
-        if (this.props.index === 0) {
-          await this.reference.playAsync();
+      if (this.props.no === undefined) {
+        if (this.state.initialLoad === false) {
+          if (this.props.index === 0) {
+            await this.reference.playAsync();
+          }
+          this.setState({ initialLoad: true });
         }
-        this.setState({ initialLoad: true });
+      } else {
+        if (this.state.initialLoad === false) {
+          if (this.props.index === this.props.no) {
+            await this.reference.playAsync();
+          }
+          this.setState({ initialLoad: true });
+        }
       }
       if (playbackStatus.isPlaying) {
         // Update your UI for the playing state

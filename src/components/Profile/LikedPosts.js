@@ -3,10 +3,13 @@ import styled from "styled-components/native";
 import { Text, ActivityIndicator } from "react-native-paper";
 import { Dimensions } from "react-native";
 import * as SecureStore from "expo-secure-store";
+import { useDispatch } from "react-redux";
+import { useNavigation } from "@react-navigation/native";
 
 import AxiosInstance from "../../api/instance";
 import theme from "../../utils/theme";
 import firebase from "../../../config";
+import VideoViewAction from "../../redux/VideoView/VideoViewAction";
 
 const { width, height } = Dimensions.get("window");
 
@@ -29,6 +32,9 @@ const BorderView = styled.View`
   border-bottom-width: 0px;
   border-right-width: 1px;
 `;
+
+const Touch = styled.TouchableWithoutFeedback``;
+
 
 const Loading = () => (
   <ActivityIndicator
@@ -67,15 +73,26 @@ export default function LikedPosts() {
   });
   const [videoData, _setVideoData] = React.useState([]);
   const [loading, _setLoading] = React.useState(<Loading />);
+
+  const Dispatch = useDispatch();
+  const navigation = useNavigation();
+
+  const NavigateToVideoView = async (index) => {
+    Dispatch(VideoViewAction(videoData, index));
+    // console.log(videoData)
+    navigation.navigate("videoView");
+  };
   return (
     <>
       <Container>
         {videoData.length === 0
           ? loading
           : videoData.map((item, index) => (
+            <Touch onPress={() => NavigateToVideoView(index)}>
               <BorderView key={index}>
                 <Image key={index} source={{ uri: item.image }} />
               </BorderView>
+            </Touch>
             ))}
       </Container>
     </>
