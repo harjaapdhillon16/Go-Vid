@@ -5,11 +5,13 @@ import { Text, Snackbar } from "react-native-paper";
 import { useNavigation } from "@react-navigation/native";
 import { Dimensions, Platform } from "react-native";
 import * as SecureStore from "expo-secure-store";
+import { useDispatch } from "react-redux";
 
 import theme from "../../utils/theme";
 import { Video } from "expo-av";
 
 import firebase from "../../../config";
+import UserProfileReducer from "../../redux/UserProfile/UserProfileAction";
 
 const { width } = Dimensions.get("screen");
 
@@ -67,12 +69,13 @@ const VideoIconsAndText = ({
   uid,
   likeAction,
   unlikeAction,
-  postNo
+  postNo,
 }) => {
   const [favorite, _setFavoriteState] = React.useState(false);
   const [snackBar, _setSnackBar] = React.useState(false);
   const Navigation = useNavigation();
 
+  const Dispatch = useDispatch();
   const Favorite = async () => {
     let index;
     if (favorite === false) {
@@ -140,14 +143,10 @@ const VideoIconsAndText = ({
     <>
       <IconView>
         <NavigationToProfile
-          onPress={() =>
-            Navigation.navigate("userProfile", {
-              uid: uid,
-              username: username,
-              uri: uri,
-              routed: true,
-            })
-          }
+          onPress={() => {
+            Dispatch(UserProfileReducer(uid, uri, username));
+            Navigation.navigate("userProfile");
+          }}
         >
           <ProfileImage source={{ uri: uri }} />
         </NavigationToProfile>

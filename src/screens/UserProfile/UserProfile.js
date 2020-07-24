@@ -4,6 +4,7 @@ import { Button } from "react-native-paper";
 import { setStatusBarHidden, StatusBar } from "expo-status-bar";
 import Constants from "expo-constants";
 import * as SecureStore from "expo-secure-store";
+import { useSelector } from "react-redux";
 
 import ProfileCard from "../../components/Profile/ProfileCard";
 import ProfileMedia from "../../components/Profile/ProfileMedia";
@@ -30,19 +31,21 @@ const Back = styled(Button)`
   background-color: ${theme.blue};
 `;
 
-const Profile = ({ navigation, route }) => {
+const Profile = ({ navigation }) => {
+  const UserProfile = useSelector((state) => state.userProfile);
+  const [data, _setData] = React.useState({});
+  const [userID, _setUserID] = React.useState("");
+
   React.useEffect(() => {
-    console.log("to");
     async function fetch() {
+      _setData({ ...UserProfile });
       const uniqueId = await SecureStore.getItemAsync("user");
       _setUserID(uniqueId);
       setStatusBarHidden(false, "none");
-      const { params } = route;
-      _setData({ ...params });
-      fetchUser(params.uid);
+      fetchUser(UserProfile.uid);
     }
     fetch();
-  }, [uniqueUserDisplayID]);
+  }, [UserProfile]);
 
   function fetchUser(uid) {
     firebase
@@ -52,21 +55,16 @@ const Profile = ({ navigation, route }) => {
         _setData(snap.val());
       });
   }
+  
   React.useEffect(() => {
     navigation.addListener("focus", () => {
       setStatusBarHidden(false, "fade");
-      if (route.params.uid !== uniqueUserDisplayID) {
-        _setUniqueUserDisplayID(route.params.uid);
-      }
     });
   });
 
-  const [data, _setData] = React.useState({});
-  const [uniqueUserDisplayID, _setUniqueUserDisplayID] = React.useState("");
-  const [userID, _setUserID] = React.useState("");
   return (
     <>
-      {userID === route.params.uid ? (
+      {userID === UserProfile.uid ? (
         <Container>
           <StatusBar style="light" />
           <ScrollView>
@@ -86,8 +84,8 @@ const Profile = ({ navigation, route }) => {
           <StatusBar style="light" />
           <ScrollView>
             <ProfileCard uid={data.uid} data={data} />
-            <UserProfileActions userID={route.params.uid} />
-            {data.public ? <UserMedia uid={route.params.uid} /> : null}
+            <UserProfileActions userID={UserProfile.uid} />
+            {data.public ? <UserMedia uid={UserProfile.uid} /> : null}
           </ScrollView>
         </Container>
       )}
