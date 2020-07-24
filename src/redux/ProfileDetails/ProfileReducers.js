@@ -25,6 +25,11 @@ const ProfileReducer = (state = initialState, action) => {
         uri: action.uri,
         uid: action.uid,
       };
+    case "USER_LOGOUT":
+      return {
+        ...state,
+        ...initialState,
+      };
     default:
       return state;
   }
