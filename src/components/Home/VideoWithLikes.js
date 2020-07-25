@@ -155,7 +155,7 @@ export default class VideoPost extends React.Component {
           uid !== null
             ? firebase
                 .database()
-                .ref(`liked/${uid}/${postNo}__${userID}`)
+                .ref(`liked/${uid}/${postNo}`)
                 .set({
                   index: index + 1,
                 })
