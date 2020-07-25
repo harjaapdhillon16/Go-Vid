@@ -5,6 +5,8 @@ import MaterialIcons from "react-native-vector-icons/MaterialIcons";
 import { Dimensions, Platform } from "react-native";
 import * as SecureStore from "expo-secure-store";
 
+import axiosInstance from "../../api/instance";
+
 import DoubleClick from "../DoubleTap/DoubleTap";
 import theme from "../../utils/theme";
 import VideoIconsAndText from "./VideoIconsAndText";
@@ -158,6 +160,16 @@ export default class VideoPost extends React.Component {
                   index: index + 1,
                 })
             : null;
+          uid !== null
+            ? axiosInstance.post("/notifications", {
+                user: uid,
+                uid: userID,
+                notificationType: "like",
+                username: this.props.data.username,
+                uri: this.props.data.image,
+                image: this.props.data.uri,
+              })
+            : null;
         });
     }
   }
@@ -181,7 +193,7 @@ export default class VideoPost extends React.Component {
             .set(snap.val() - 1);
           const uid = await SecureStore.getItemAsync("user");
           const userID = this.props.data.uid;
-
+          firebase.database().ref(`notifications/${uid}/${userID}`).remove();
           uid !== null
             ? firebase
                 .database()

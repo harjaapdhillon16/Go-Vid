@@ -22,12 +22,12 @@ const Heading = styled(Text)`
   color: ${theme.white};
   padding: 1px;
   font-weight: 500;
-  padding-bottom:3px;
+  padding-bottom: 3px;
 `;
 const Username = styled(Text)`
   font-weight: bold;
   color: ${theme.white};
-  padding-top:3px;
+  padding-top: 3px;
 `;
 const TextView = styled.View`
   width: 62%;
@@ -40,26 +40,30 @@ const Image = styled.Image`
   border-radius: 100px;
 `;
 
-const NotificationComponent = () => {
+const NotificationComponent = ({ data }) => {
   return (
     <Container>
       <Image
         source={{
-          uri:
-            "https://scontent-del1-1.cdninstagram.com/v/t51.2885-19/s150x150/105963185_581204589498570_1605544719838487731_n.jpg?_nc_ht=scontent-del1-1.cdninstagram.com&_nc_ohc=_vp8Ba3hbpsAX-sp2SZ&oh=e3da91d5b7ac5eaf1967b9711415fea3&oe=5F37975F",
+          uri: data.image,
         }}
       />
       <TextView>
-        <Username>@harjaap_dhillon_</Username>
-        <Heading> Just Liked Your Video</Heading>
+        <Username>@{data.username}</Username>
+        {data.notificationType === "like" ? (
+          <Heading> Just Liked Your Video</Heading>
+        ) : (
+          <Heading>Started following you</Heading>
+        )}
       </TextView>
-      <Image
-        style={{ borderRadius: 10 }}
-        source={{
-          uri:
-            "https://scontent-del1-1.cdninstagram.com/v/t51.2885-19/s150x150/105963185_581204589498570_1605544719838487731_n.jpg?_nc_ht=scontent-del1-1.cdninstagram.com&_nc_ohc=_vp8Ba3hbpsAX-sp2SZ&oh=e3da91d5b7ac5eaf1967b9711415fea3&oe=5F37975F",
-        }}
-      />
+      {data.notificationType === "like" ? (
+        <Image
+          style={{ borderRadius: 10 }}
+          source={{
+            uri: data.uri,
+          }}
+        />
+      ) : null}
     </Container>
   );
 };

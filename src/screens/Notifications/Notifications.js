@@ -33,26 +33,51 @@ const Notifications = ({ navigation }) => {
   const Profile = useSelector((state) => state.profile);
 
   React.useEffect(() => {
-    async function listen() {
-      if (Profile.uid !== "") {
-        firebase
-          .database()
-          .ref(`notifications/${Profile.uid}`)
-          .on("child_added", (snap) => {
-            console.log(snap.val());
-          });
-      } else {
-        firebase.database().ref().off();
-      }
-    }
     listen();
   }, [Profile]);
+
+  const [fetched, _setFetched] = React.useState(false);
+
+  async function listen() {
+    if (Profile.uid !== "") {
+      const NotificationsDb = firebase
+        .database()
+        .ref(`notifications/${Profile.uid}`);
+      console.log(Profile.uid);
+
+
+      NotificationsDb.on("child_added", async (snap) => {
+        console.log(snap.val());
+        if (snap.val().image !== undefined) {
+          let data = {};
+          data.uid = snap.val().key;
+          data.username = snap.val().username;
+          data.image = snap.val().image;
+          data.uri = snap.val().uri;
+          data.notificationType = snap.val().notificationType;
+          let array = notifications;
+          array.push(data);
+          if ([data] !== notifications) {
+            console.log(data);
+            await _setNotifications([...array]);
+          }
+        }
+      });
+    } else {
+      firebase.database().ref().off();
+      console.log("subscribe off");
+    }
+    _setFetched(true);
+  }
+
+  const [notifications, _setNotifications] = React.useState([]);
   return (
     <Container>
       <StatusBar style="light" />
       <Heading>Notifications</Heading>
-      <NotificationComponent />
-      <NotificationComponent />
+      {notifications.map((item, index) => (
+        <NotificationComponent data={item} key={index} />
+      ))}
       <BottomNavigationBar />
     </Container>
   );
