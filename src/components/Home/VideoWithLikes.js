@@ -113,6 +113,20 @@ export default class VideoPost extends React.Component {
     await this.reference.setOnPlaybackStatusUpdate(
       this._onPlaybackStatusUpdate
     );
+    const user = await SecureStore.getItemAsync("user");
+    const { postNo, uid } = this.props.data;
+    if (user !== null) {
+      console.log(user, postNo);
+      firebase
+        .database()
+        .ref(`liked/${user}/${postNo}`)
+        .once("value", (snap) => {
+          console.log(snap.val());
+          if (snap.val() !== null) {
+            this.setState({ likedState: true });
+          }
+        });
+    }
   }
 
   async likedApi() {
@@ -168,6 +182,7 @@ export default class VideoPost extends React.Component {
                 username: this.props.data.username,
                 uri: this.props.data.image,
                 image: this.props.data.uri,
+                postNo:this.props.data.postNo
               })
             : null;
         });
@@ -193,12 +208,9 @@ export default class VideoPost extends React.Component {
             .set(snap.val() - 1);
           const uid = await SecureStore.getItemAsync("user");
           const userID = this.props.data.uid;
-          firebase.database().ref(`notifications/${uid}/${userID}`).remove();
+          firebase.database().ref(`notifications/${userID}/${postNo}`).remove();
           uid !== null
-            ? firebase
-                .database()
-                .ref(`liked/${uid}/${postNo}__${userID}`)
-                .remove()
+            ? firebase.database().ref(`liked/${uid}/${postNo}`).remove()
             : null;
         });
     }

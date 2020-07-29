@@ -43,25 +43,28 @@ const Notifications = ({ navigation }) => {
       const NotificationsDb = firebase
         .database()
         .ref(`notifications/${Profile.uid}`);
-      console.log(Profile.uid);
 
-
-      NotificationsDb.on("child_added", async (snap) => {
-        console.log(snap.val());
-        if (snap.val().image !== undefined) {
-          let data = {};
-          data.uid = snap.val().key;
-          data.username = snap.val().username;
-          data.image = snap.val().image;
-          data.uri = snap.val().uri;
-          data.notificationType = snap.val().notificationType;
-          let array = notifications;
-          array.push(data);
-          if ([data] !== notifications) {
-            console.log(data);
-            await _setNotifications([...array]);
+      NotificationsDb.once("value", async (data) => {
+        const array = [];
+        let counter = 0;
+        data.forEach((snap) => {
+          if (snap.val().image !== undefined) {
+            counter += 1;
+            let dataObj = {};
+            dataObj.uid = snap.val().uid;
+            dataObj.username = snap.val().username;
+            dataObj.image = snap.val().image;
+            dataObj.uri = snap.val().uri;
+            dataObj.d = snap.ref.key;
+            dataObj.notificationType = snap.val().notificationType;
+            array.push(dataObj);
+            console.log(dataObj,array)
+            if (counter === Object.keys(data.val()).length) {
+              _setNotifications([...array]);
+              console.log(notifications);
+            }
           }
-        }
+        });
       });
     } else {
       firebase.database().ref().off();

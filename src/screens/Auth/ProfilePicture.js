@@ -10,6 +10,7 @@ import { BackHandler } from "react-native";
 import { useDispatch } from "react-redux";
 import firebase from "../../../config";
 
+import ProfileAction from "../../redux/ProfileDetails/ProfileAction";
 import theme from "../../utils/theme";
 import AuthAction from "../../redux/Auth/AuthAction";
 import ProfileDetails from "../../redux/ProfileDetails/ProfileReducers";
@@ -70,7 +71,7 @@ const ProfilePicture = () => {
       });
   };
   const [imageUri, _setImageUri] = React.useState(
-    "https://progresssoft.imgix.net/default-user.jpg?auto=compress&fit=crop"
+    "https://progresssoft.imgix.net/default-user.jpg?auto=compress&fit=crop",
   );
   const [loading, _setLoading] = React.useState(false);
   Navigation.addListener("focus", () => {
@@ -122,7 +123,7 @@ const ProfilePicture = () => {
       .database()
       .ref(`users/${uid}/uri`)
       .set(
-        "https://progresssoft.imgix.net/default-user.jpg?auto=compress&fit=crop"
+        "https://progresssoft.imgix.net/default-user.jpg?auto=compress&fit=crop",
       )
       .then(() => {
         SecureStore.setItemAsync("login", "true");

@@ -12,6 +12,7 @@ import UserProfileActions from "../../components/UserProfile/UserProfileActions"
 import ProfileActions from "../../components/Profile/ProfileActions";
 import PrivateCard from "../../components/Profile/PrivateCard";
 import UserMedia from "../../components/UserProfile/UserMedia";
+import ProfileAction from "./../../redux/UserProfile/UserProfileAction";
 
 import firebase from "../../../config";
 import theme from "../../utils/theme";
@@ -55,7 +56,7 @@ const Profile = ({ navigation }) => {
         _setData(snap.val());
       });
   }
-  
+
   React.useEffect(() => {
     navigation.addListener("focus", () => {
       setStatusBarHidden(false, "fade");
@@ -66,7 +67,7 @@ const Profile = ({ navigation }) => {
     <>
       {userID === UserProfile.uid ? (
         <Container>
-          <StatusBar style="light" />
+          <StatusBar style='light' />
           <ScrollView>
             <ProfileCard uid={data.uid} data={data} />
             <ProfileActions />
@@ -81,7 +82,7 @@ const Profile = ({ navigation }) => {
         </Container>
       ) : (
         <Container>
-          <StatusBar style="light" />
+          <StatusBar style='light' />
           <ScrollView>
             <ProfileCard uid={data.uid} data={data} />
             <UserProfileActions userID={UserProfile.uid} />

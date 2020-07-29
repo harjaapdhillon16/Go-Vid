@@ -4,6 +4,7 @@ import { Button, ActivityIndicator } from "react-native-paper";
 import { useNavigation } from "@react-navigation/native";
 import * as SecureStore from "expo-secure-store";
 import axiosInstance from "../../api/instance";
+import { Alert } from "react-native";
 
 import theme from "../../utils/theme";
 import firebase from "../../../config";
@@ -139,7 +140,23 @@ const UserProfileActions = ({ userID }) => {
         >
           Back
         </Back>
-        <Options labelStyle={{ fontWeight: "bold" }} mode="contained">
+        <Options
+          onPress={() => {
+            return Alert.alert(
+              "Go-Vid",
+              "We are rolling out with some incredible new features, while we do that you can enjoy the feed.",
+              [
+                {
+                  text: "Yeah Awesome",
+                  style: "cancel",
+                },
+              ],
+              { cancelable: false }
+            );
+          }}
+          labelStyle={{ fontWeight: "bold" }}
+          mode="contained"
+        >
           Options
         </Options>
       </RowView>
