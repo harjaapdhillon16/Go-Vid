@@ -27,15 +27,6 @@ export default function Example(props) {
 
   return (
     <View style={styles.container}>
-      <BottomSheet
-        ref={bs}
-        snapPoints={[Height, 0]}
-        renderContent={renderInner}
-        initialSnap={1}
-        renderHeader={renderHeader}
-        callbackNode={fall}
-        enabledInnerScrolling={true}
-      />
 
       <VideoWithLikes
         data={props.data}

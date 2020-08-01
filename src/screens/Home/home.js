@@ -7,6 +7,7 @@ import Constants from "expo-constants";
 import * as SecureStore from "expo-secure-store";
 import { useDispatch } from "react-redux";
 import firebase from "../../../config";
+import MaterialCommunityIcons from "react-native-vector-icons/MaterialCommunityIcons";
 
 import SwipingView from "../../components/Home/SwipingView";
 import Post from "../../components/Home/VideoWithLikes";
@@ -26,6 +27,10 @@ const Container = styled.View`
 
 const Heading = styled(Title)`
   color: ${theme.white};
+`;
+
+const ReloadStyled = styled(MaterialCommunityIcons)`
+  position: absolute;
 `;
 
 const Home = ({ navigation }) => {
@@ -66,9 +71,11 @@ const Home = ({ navigation }) => {
     hello();
   }, [Data]);
 
+  
+
   return (
     <Container>
-      <StatusBar style="light" />
+      <StatusBar style='light' backgroundColor={theme.black} />
       <SwipingView Data={Data} navigation={navigation} />
       <BottomNavigationBar homeScreen />
     </Container>

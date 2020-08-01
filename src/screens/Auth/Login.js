@@ -37,6 +37,15 @@ const Input = styled.TextInput`
 const GetStarted = styled(Button)`
   width: 80%;
   height: 50px;
+  align-items: center;
+  border-radius: 10px;
+  justify-content: center;
+  background-color: ${theme.primaryColor};
+`;
+const GetStartedView = styled.View`
+  width: 80%;
+  height: 50px;
+  align-items: center;
   border-radius: 10px;
   justify-content: center;
   background-color: ${theme.primaryColor};
@@ -75,6 +84,35 @@ const Loading = () => (
   <ActivityIndicator color={theme.black} size={30} style={{ paddingTop: 5 }} />
 );
 
+const PasswordInput = styled.TextInput`
+  height: 50px;
+  border-radius: 10px;
+  width: 90%;
+  align-self: flex-start;
+  color: ${theme.white};
+  padding-left: 10px;
+  transform: translateX(-10px);
+`;
+const PasswordView = styled.View`
+  width: 80%;
+  height: 50px;
+  border: 1px solid ${theme.white};
+  padding-left: 10px;
+  flex-direction: row;
+  border-radius: 10px;
+  margin-bottom: 5px;
+`;
+const PasswordIcon = styled(MaterialIcons)`
+  transform: translateX(-7px);
+  padding-top: 10px;
+`;
+
+const LoadingButton = () => (
+  <GetStartedView>
+    <Loading />
+  </GetStartedView>
+);
+
 const Login = ({ navigation }) => {
   const Dispatch = useDispatch();
   const fetchData = async () => {
@@ -90,6 +128,8 @@ const Login = ({ navigation }) => {
   const [password, _setPassword] = React.useState("");
   const [email, _setEmail] = React.useState("");
   const [login, _setLogin] = React.useState("LOGIN");
+  const [passwordVisible, _setPasswordVisibility] = React.useState(true);
+
   const GetStartedFunction = () => {
     if (email === "" || password === "") {
       return Alert.alert(
@@ -101,7 +141,7 @@ const Login = ({ navigation }) => {
             style: "cancel",
           },
         ],
-        { cancelable: false }
+        { cancelable: false },
       );
     } else if (ValidateEmail(email) === false) {
       return Alert.alert(
@@ -113,10 +153,10 @@ const Login = ({ navigation }) => {
             style: "cancel",
           },
         ],
-        { cancelable: false }
+        { cancelable: false },
       );
     } else {
-      _setLogin(<Loading />);
+      _setLogin(<LoadingButton />);
       firebase
         .auth()
         .signInWithEmailAndPassword(email.toLowerCase(), password)
@@ -139,7 +179,7 @@ const Login = ({ navigation }) => {
                 onPress: () => navigation.goBack(),
               },
             ],
-            { cancelable: false }
+            { cancelable: false },
           );
         });
     }
@@ -147,7 +187,7 @@ const Login = ({ navigation }) => {
   return (
     <Container>
       <ScrollView
-        keyboardShouldPersistTaps="always"
+        keyboardShouldPersistTaps='always'
         contentContainerStyle={{
           justifyContent: "center",
           alignItems: "center",
@@ -157,31 +197,46 @@ const Login = ({ navigation }) => {
           onPress={() => navigation.goBack()}
           color={theme.white}
           size={40}
-          name="add-circle"
+          name='add-circle'
         />
         <Heading>Login</Heading>
         <Input
-          placeholder="Email"
+          placeholder='Email'
           value={email}
-          autoCapitalize="none"
+          autoCapitalize='none'
           placeholderTextColor={theme.grey}
           onChangeText={(e) => _setEmail(e)}
           keyboardType={
             Platform.OS === "ios" ? "ascii-capable" : "visible-password"
           }
         />
-        <Input
-          placeholder="Password"
-          value={password}
-          onChangeText={(e) => _setPassword(e)}
-          placeholderTextColor={theme.grey}
-          keyboardType={Platform.OS === "ios" ? "ascii-capable" : "email"}
-          autoCapitalize="none"
-        />
+        <PasswordView>
+          <PasswordInput
+            placeholder='Password'
+            value={password}
+            placeholderTextColor={theme.grey}
+            onChangeText={(e) => _setPassword(e)}
+            keyboardType={Platform.OS === "ios" ? "ascii-capable" : "default"}
+            autoCapitalize='none'
+            secureTextEntry={passwordVisible}
+          />
+          <PasswordIcon
+            name={passwordVisible ? "visibility" : "visibility-off"}
+            size={25}
+            color={theme.white}
+            onPress={() => {
+              _setPasswordVisibility(!passwordVisible);
+            }}
+          />
+        </PasswordView>
         <Touch onPress={() => GetStartedFunction()}>
-          <GetStarted labelStyle={{ fontWeight: "bold", color: theme.black }}>
-            {login}
-          </GetStarted>
+          {login === "LOGIN" ? (
+            <GetStarted labelStyle={{ fontWeight: "bold", color: theme.black }}>
+              {login}
+            </GetStarted>
+          ) : (
+            login
+          )}
         </Touch>
         <View />
       </ScrollView>

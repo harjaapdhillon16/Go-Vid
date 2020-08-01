@@ -17,13 +17,13 @@ const ENTRIES1 = [
   {
     title: "LATEST ",
     subtitle: "Lorem ipsum",
-    illustration: "https://i.imgur.com/MABUbpDl.jpg",
+    illustration: "https://images.unsplash.com/photo-1573350289846-890d1c55df8f",
     screen:"latest"
   },
   {
     title: "Popular Post(Coming soon)",
     subtitle: "Lorem ipsum dolor sit amet",
-    illustration: "https://i.imgur.com/UPrs1EWl.jpg",
+    illustration: "https://images.unsplash.com/photo-1582395787198-630d7fb2bfbf?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=500&q=60",
   },
 ];
 const { width: screenWidth } = Dimensions.get("window");

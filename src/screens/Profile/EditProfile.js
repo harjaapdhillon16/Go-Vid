@@ -40,9 +40,11 @@ const Icon = styled(MaterialIcons)`
   padding: 5px;
 `;
 
-const Done = styled(Button)`
+const Done = styled.TouchableOpacity`
   position: absolute;
-  top: 5px;
+  top: 10px;
+  padding:10px 20px;
+  border-radius:10px;
   right: 10px;
   border: 1px solid ${theme.blue};
 `;
@@ -52,6 +54,8 @@ const ScrollView = styled.ScrollView``;
 const Loading = () => (
   <ActivityIndicator color={theme.blue} size={30} style={{ paddingTop: 5 }} />
 );
+
+const DONE = () => <Text style={{color:theme.white}}>DONE</Text>;
 
 const EditProfile = (props) => {
   const data = useSelector((state) => state.profile);
@@ -65,7 +69,7 @@ const EditProfile = (props) => {
   const [status, _setStatus] = React.useState(false);
   const [UsernameConstants, _setUsernameConstants] = React.useState("");
   const [ImageChanged, _setImageChanged] = React.useState(false);
-  const [button, _setButton] = React.useState("Done");
+  const [button, _setButton] = React.useState(<DONE />);
 
   async function update() {
     const uid = await SecureStore.getItemAsync("user");
@@ -140,7 +144,7 @@ const EditProfile = (props) => {
   };
   return (
     <Container>
-      <ScrollView keyboardShouldPersistTaps="always">
+      <ScrollView keyboardShouldPersistTaps='always'>
         <Row>
           <Heading>Edit Profile</Heading>
         </Row>

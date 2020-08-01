@@ -3,7 +3,9 @@ import styled from "styled-components";
 import { useNavigation } from "@react-navigation/native";
 import MaterialDesign from "react-native-vector-icons/MaterialIcons";
 import theme from "../utils/theme";
+import { Alert } from "react-native";
 import { TouchableWithoutFeedback, Platform } from "react-native";
+import { useSelector } from "react-redux";
 
 const Container = styled.View`
   width: 100%;
@@ -29,13 +31,32 @@ const IconView = styled.View`
 `;
 
 const BottomNavigationBar = ({ homeScreen, androidHomeScreen }) => {
+  const Auth = useSelector((state) => state.auth.AuthValue);
+
+  const UploadNavigate = () => {
+    if (Auth) {
+      navigation.navigate("UploadCombine");
+    } else {
+      return Alert.alert(
+        "Go-Vid",
+        "You need to login or signup in order to upload posts.",
+        [
+          {
+            text: "Yeah Awesome",
+            style: "cancel",
+          },
+        ],
+        { cancelable: false },
+      );
+    }
+  };
   const navigation = useNavigation();
   return (
     <Container androidHomeScreen={androidHomeScreen} homeScreen={homeScreen}>
       <TouchableWithoutFeedback onPress={() => navigation.navigate("home")}>
         <IconView>
           <MaterialDesign
-            name="home"
+            name='home'
             color={homeScreen ? theme.white : theme.white}
             size={30}
           />
@@ -44,17 +65,15 @@ const BottomNavigationBar = ({ homeScreen, androidHomeScreen }) => {
       <TouchableWithoutFeedback onPress={() => navigation.navigate("search")}>
         <IconView>
           <MaterialDesign
-            name="search"
+            name='search'
             color={homeScreen ? theme.white : theme.white}
             size={30}
           />
         </IconView>
       </TouchableWithoutFeedback>
-      <TouchableWithoutFeedback
-        onPress={() => navigation.navigate("UploadCombine")}
-      >
+      <TouchableWithoutFeedback onPress={() => UploadNavigate()}>
         <IconView>
-          <MaterialDesign name="backup" color={theme.primaryColor} size={30} />
+          <MaterialDesign name='backup' color={theme.primaryColor} size={30} />
         </IconView>
       </TouchableWithoutFeedback>
       <TouchableWithoutFeedback
@@ -62,7 +81,7 @@ const BottomNavigationBar = ({ homeScreen, androidHomeScreen }) => {
       >
         <IconView>
           <MaterialDesign
-            name="notifications-none"
+            name='notifications-none'
             color={homeScreen ? theme.white : theme.white}
             size={30}
           />
@@ -71,7 +90,7 @@ const BottomNavigationBar = ({ homeScreen, androidHomeScreen }) => {
       <TouchableWithoutFeedback onPress={() => navigation.navigate("profile")}>
         <IconView>
           <MaterialDesign
-            name="person"
+            name='person'
             color={homeScreen ? theme.white : theme.white}
             size={30}
           />
